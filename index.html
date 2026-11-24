@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>鼠标传感器测试:检测丢失追踪、甩飞和负加速</title>
-<meta name="description" content="免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。">
-<link rel="canonical" href="https://mouse-test.pages.dev/zh/">
+<title>Mouse Sensor Test: check for tracking loss, spin-outs and negative acceleration</title>
+<meta name="description" content="Free online mouse sensor test. Find out if your mouse loses tracking on fast flicks (spin-outs, negative acceleration) and get a report to send to the seller. Runs in your browser, nothing is uploaded.">
+<link rel="canonical" href="https://mouse-test.pages.dev/">
 <link rel="alternate" hreflang="en" href="https://mouse-test.pages.dev/">
-<link rel="alternate" hreflang="ar" href="https://mouse-test.pages.dev/ar/">
-<link rel="alternate" hreflang="es" href="https://mouse-test.pages.dev/es/">
-<link rel="alternate" hreflang="pt" href="https://mouse-test.pages.dev/pt/">
-<link rel="alternate" hreflang="de" href="https://mouse-test.pages.dev/de/">
-<link rel="alternate" hreflang="zh-Hans" href="https://mouse-test.pages.dev/zh/">
+<link rel="alternate" hreflang="ar" href="https://mouse-test.pages.dev/ar">
+<link rel="alternate" hreflang="es" href="https://mouse-test.pages.dev/es">
+<link rel="alternate" hreflang="pt" href="https://mouse-test.pages.dev/pt">
+<link rel="alternate" hreflang="de" href="https://mouse-test.pages.dev/de">
+<link rel="alternate" hreflang="zh-Hans" href="https://mouse-test.pages.dev/zh">
 <link rel="alternate" hreflang="x-default" href="https://mouse-test.pages.dev/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="鼠标传感器测试">
-<meta property="og:title" content="鼠标传感器测试:检测丢失追踪、甩飞和负加速">
-<meta property="og:description" content="免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。">
-<meta property="og:url" content="https://mouse-test.pages.dev/zh/">
+<meta property="og:site_name" content="Mouse Sensor Test">
+<meta property="og:title" content="Mouse Sensor Test: check for tracking loss, spin-outs and negative acceleration">
+<meta property="og:description" content="Free online mouse sensor test. Find out if your mouse loses tracking on fast flicks (spin-outs, negative acceleration) and get a report to send to the seller. Runs in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://mouse-test.pages.dev/">
 <meta property="og:image" content="https://mouse-test.pages.dev/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:locale" content="zh_CN">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0f1115">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"鼠标传感器测试","description":"免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。","url":"https://mouse-test.pages.dev/zh/","inLanguage":"zh","applicationCategory":"UtilitiesApplication","operatingSystem":"Windows, macOS, Linux, ChromeOS","browserRequirements":"Chrome or Edge on a desktop computer with a mouse","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Mouse Sensor Test","description":"Free online mouse sensor test. Find out if your mouse loses tracking on fast flicks (spin-outs, negative acceleration) and get a report to send to the seller. Runs in your browser, nothing is uploaded.","url":"https://mouse-test.pages.dev/","inLanguage":"en","applicationCategory":"UtilitiesApplication","operatingSystem":"Windows, macOS, Linux, ChromeOS","browserRequirements":"Chrome or Edge on a desktop computer with a mouse","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
   :root{--bg:#0f1115;--panel:#171a21;--panel2:#12151b;--line:#2a2f3a;--text:#e7e9ee;--mute:#9aa1ad;--acc:#4f8cff;--good:#2fbf71;--warn:#e6a23c;--bad:#ef5350}
@@ -94,12 +94,12 @@
 <div class="wrap">
   <header>
     <div>
-      <h1 data-i18n="title">鼠标传感器测试</h1>
-      <p class="sub" data-i18n="tagline">检测你的鼠标在快速移动时是否会丢失追踪(甩飞、负加速),并生成一份可以发给卖家的报告。</p>
-      <span class="privacy" data-i18n="privacy">🔒 完全在你的浏览器中运行,不会上传任何数据。</span>
+      <h1 data-i18n="title">Mouse Sensor Test</h1>
+      <p class="sub" data-i18n="tagline">Find out if your mouse loses tracking on fast movements (spin-outs, negative acceleration), and get a report you can send to the seller.</p>
+      <span class="privacy" data-i18n="privacy">🔒 Runs entirely in your browser. Nothing is uploaded.</span>
     </div>
     <div class="lang">
-      <button id="langBtn" aria-haspopup="listbox"><span aria-hidden="true">🌐</span><span id="langName">中文</span><span aria-hidden="true">▾</span></button>
+      <button id="langBtn" aria-haspopup="listbox"><span aria-hidden="true">🌐</span><span id="langName">English</span><span aria-hidden="true">▾</span></button>
       <ul id="langList" role="listbox"></ul>
     </div>
   </header>
@@ -110,68 +110,68 @@
     <div class="card">
       <div id="pad" tabindex="0"><div id="padText"></div></div>
       <div class="stats">
-        <div class="stat"><b id="sPoll">–</b><span data-i18n="stPoll">回报率(Hz,当前 / 最高)</span></div>
-        <div class="stat"><b id="sRaw">–</b><span data-i18n="stRaw">传感器原始数据</span></div>
-        <div class="stat"><b id="sSpeed">–</b><span data-i18n="stSpeed">上次滑动的峰值速度</span></div>
+        <div class="stat"><b id="sPoll">–</b><span data-i18n="stPoll">Report rate (Hz, now / max)</span></div>
+        <div class="stat"><b id="sRaw">–</b><span data-i18n="stRaw">Raw sensor input</span></div>
+        <div class="stat"><b id="sSpeed">–</b><span data-i18n="stSpeed">Last swipe peak speed</span></div>
       </div>
       <div class="row">
-        <label><span data-i18n="dpi">鼠标 DPI</span> <input type="number" id="cpi" value="800" min="50" step="50"></label>
-        <label><span data-i18n="baseN">基准滑动次数</span> <input type="number" id="baseN" value="6" min="3" max="20"></label>
+        <label><span data-i18n="dpi">Mouse DPI</span> <input type="number" id="cpi" value="800" min="50" step="50"></label>
+        <label><span data-i18n="baseN">Baseline swipes</span> <input type="number" id="baseN" value="6" min="3" max="20"></label>
       </div>
-      <p class="muted small" data-i18n="dpiHint" style="margin:6px 0 0">请填写鼠标实际设置的 DPI(可在驱动软件或 DPI 按键中查看)。它只影响厘米和米/秒的数值,不影响测试结论。</p>
+      <p class="muted small" data-i18n="dpiHint" style="margin:6px 0 0">Use the DPI your mouse is actually set to (check its software or DPI button). It only affects the cm and m/s figures, not the verdict.</p>
     </div>
 
     <div class="card">
-      <h2 data-i18n="howTitle">测试方法</h2>
+      <h2 data-i18n="howTitle">How to test</h2>
       <ol>
-        <li data-i18n="step1"><b>在鼠标垫上放两个固定挡块</b>,相距 15–40 厘米:可以用书、尺子或鼠标垫边缘。每次滑动时,鼠标两端都必须碰到挡块。</li>
-        <li data-i18n="step2"><b>输入鼠标当前的 DPI</b>,然后点击测试区域锁定鼠标。</li>
-        <li data-i18n="step3"><b>第 1 阶段,基准:</b>在两个挡块之间慢慢地、仔细地滑动。来回滑动都可以。测试会自动进入下一阶段。</li>
-        <li data-i18n="step4"><b>第 2 阶段,测试:</b>在挡块之间用力快速甩动,就像玩游戏时一样。至少做 10 次。</li>
-        <li data-i18n="step5">每次滑动后,<b>让鼠标贴着挡块保持不动</b>,直到显示“已保存”。全程不要抬起鼠标。</li>
+        <li data-i18n="step1"><b>Set up two hard stops</b> on your mousepad, 15–40 cm apart: books, a ruler or the pad's edges. The mouse must touch a stop at both ends of every swipe.</li>
+        <li data-i18n="step2"><b>Enter the DPI</b> your mouse is set to, then click the test area to lock the mouse.</li>
+        <li data-i18n="step3"><b>Phase 1, baseline:</b> do slow, careful swipes from stop to stop. Back and forth is fine. The test moves on by itself.</li>
+        <li data-i18n="step4"><b>Phase 2, test:</b> flick hard between the stops, as fast as you would in a game. Do at least 10.</li>
+        <li data-i18n="step5">After every swipe, <b>hold the mouse still against the stop</b> until it says Saved. Never lift the mouse.</li>
       </ol>
-      <p class="muted small" data-i18n="step6" style="margin-bottom:0">每次滑动的距离都相同,所以正常的传感器在任何速度下都会报告相同的数值。如果快速滑动的数值偏小,说明传感器在丢失追踪。</p>
+      <p class="muted small" data-i18n="step6" style="margin-bottom:0">Every swipe covers the same distance, so a healthy sensor reports the same count at any speed. Fast swipes that come up short mean the sensor is losing tracking.</p>
     </div>
   </div>
 
   <div class="grid" style="margin-top:14px">
     <div class="card">
       <div class="row" style="margin-top:0;justify-content:space-between">
-        <h2 data-i18n="chartTitle" style="margin:0">每次滑动的计数与速度</h2>
-        <span><span data-i18n="phase">阶段</span>: <span id="phaseLbl" class="phase base"></span></span>
+        <h2 data-i18n="chartTitle" style="margin:0">Counts per swipe vs speed</h2>
+        <span><span data-i18n="phase">Phase</span>: <span id="phaseLbl" class="phase base"></span></span>
       </div>
       <canvas id="chart" style="margin-top:10px"></canvas>
-      <p class="muted small" data-i18n="chartHint" style="margin:6px 0 0">每个点都应落在蓝线上。蓝色为基准滑动,绿色为正确的测试滑动,红色为传感器测错的滑动。</p>
+      <p class="muted small" data-i18n="chartHint" style="margin:6px 0 0">Every dot should sit on the blue line. Blue dots are baseline swipes, green are correct test swipes, red are swipes the sensor got wrong.</p>
       <div id="verdict" class="verdict v-none"></div>
     </div>
     <div class="card">
-      <h2><span data-i18n="tableTitle">滑动记录</span> <span class="muted" id="nSw">0</span></h2>
+      <h2><span data-i18n="tableTitle">Swipes</span> <span class="muted" id="nSw">0</span></h2>
       <div class="tbl"><table>
-        <thead><tr><th>#</th><th data-i18n="thCounts">计数</th><th data-i18n="thPct">占基准 %</th><th data-i18n="thSpeed">速度 m/s</th><th data-i18n="thBack">反向 %</th><th data-i18n="thStatus">状态</th></tr></thead>
+        <thead><tr><th>#</th><th data-i18n="thCounts">Counts</th><th data-i18n="thPct">% of baseline</th><th data-i18n="thSpeed">Peak m/s</th><th data-i18n="thBack">Backward %</th><th data-i18n="thStatus">Status</th></tr></thead>
         <tbody id="tb"></tbody>
       </table></div>
       <div class="row">
-        <button class="btn ghost" id="undo" data-i18n="undo">撤销上一次</button>
-        <button class="btn ghost" id="redoBase" data-i18n="redo">重做基准</button>
-        <button class="btn ghost" id="clear" data-i18n="clear">全部清除</button>
+        <button class="btn ghost" id="undo" data-i18n="undo">Undo last</button>
+        <button class="btn ghost" id="redoBase" data-i18n="redo">Redo baseline</button>
+        <button class="btn ghost" id="clear" data-i18n="clear">Clear all</button>
       </div>
     </div>
   </div>
 
   <div class="card" style="margin-top:14px">
-    <h2 data-i18n="reportTitle">给卖家的报告</h2>
-    <p class="muted small" data-i18n="reportHint" style="margin-top:0">复制这份报告,并附上一段你做测试时的简短录屏一起发送。</p>
+    <h2 data-i18n="reportTitle">Report for the seller</h2>
+    <p class="muted small" data-i18n="reportHint" style="margin-top:0">Copy this and send it together with a short screen recording of you doing the test.</p>
     <textarea id="rep" readonly></textarea>
-    <div class="row"><button class="btn" id="copyBtn" data-i18n="copy">复制报告</button><span id="copyMsg" class="muted"></span></div>
+    <div class="row"><button class="btn" id="copyBtn" data-i18n="copy">Copy report</button><span id="copyMsg" class="muted"></span></div>
   </div>
 
   <section class="card" style="margin-top:14px">
-    <h2 data-i18n="aboutTitle">这个测试检测什么</h2>
-    <p data-i18n="aboutBody" style="margin:0 0 10px">每个鼠标传感器都有一个能正常追踪的最高速度。超过这个速度时,好的传感器仍然能记录每一毫米,而性能弱或有故障的传感器会开始丢失移动:在游戏中准星移动得比你的手少,或者突然往回跳(甩飞)。本测试绕过 Windows 加速,直接读取传感器的原始数据,并在完全相同的距离上比较快速滑动和慢速滑动。如果快速滑动的数值偏小,说明传感器在丢失追踪,报告会给出证明这一点的数据。</p>
-    <a class="guide" href="/guide/" data-i18n="guideLink">阅读指南(英文):如何判断鼠标传感器是否有故障 →</a>
+    <h2 data-i18n="aboutTitle">What this test checks</h2>
+    <p data-i18n="aboutBody" style="margin:0 0 10px">A mouse sensor has a maximum speed it can track. Above it, a good sensor still reports every millimetre, while a weak or faulty one starts losing movement: in games your crosshair moves less than your hand, or jumps backwards (a spin-out). This test reads the raw counts straight from the sensor, bypassing Windows acceleration, and compares fast swipes with slow ones over the exact same distance. If fast swipes come up short, the sensor is losing tracking, and the report gives you the numbers to prove it.</p>
+    <a class="guide" href="/guide" data-i18n="guideLink">Read the guide: how to tell if your mouse sensor is faulty →</a>
   </section>
 
-  <footer data-i18n="footer">免费使用。帮助大家在信任一只鼠标之前先检查它,或在退货时证明故障。</footer>
+  <footer data-i18n="footer">Free to use. Made to help people check a mouse before trusting it, or prove a fault when returning it.</footer>
 </div>
 
 <script>
@@ -515,7 +515,7 @@ function t(key, vars) {
   if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => vars[k] !== undefined ? vars[k] : m);
   return s;
 }
-const langPath = c => c === 'en' ? '/' : '/' + c + '/';
+const langPath = c => c === 'en' ? '/' : '/' + c;
 const onWeb = location.protocol.startsWith('http');
 function browserLang() {
   for (const l of (navigator.languages || [navigator.language || 'en'])) {

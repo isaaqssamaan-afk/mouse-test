@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to tell if your mouse sensor is faulty: tracking loss, spin-outs and negative acceleration</title>
+<meta name="description" content="Your crosshair moves less than your hand, or snaps backwards on fast flicks? Learn what causes mouse tracking loss, how to tell a faulty unit from a weak sensor, and how to prove it to the seller.">
+<link rel="canonical" href="https://mouse-test.pages.dev/guide">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to tell if your mouse sensor is faulty">
+<meta property="og:description" content="What causes mouse tracking loss on fast flicks, how to test for it, and how to prove it to the seller.">
+<meta property="og:url" content="https://mouse-test.pages.dev/guide">
+<meta property="og:image" content="https://mouse-test.pages.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1115">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to tell if your mouse sensor is faulty: tracking loss, spin-outs and negative acceleration","inLanguage":"en","url":"https://mouse-test.pages.dev/guide","image":"https://mouse-test.pages.dev/og.png"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Will a higher polling rate fix tracking loss?","acceptedAnswer":{"@type":"Answer","text":"No. The polling rate only controls how often the mouse reports to the PC. If the sensor itself cannot keep up with your hand, a higher report rate sends the same wrong numbers more often."}},
+{"@type":"Question","name":"Does lowering DPI help?","acceptedAnswer":{"@type":"Answer","text":"Usually not. If the problem is the sensor's maximum tracking speed, it fails at the same hand speed at any DPI. If lowering DPI does make the problem disappear, the mouse is mishandling high count rates, and lower DPI with higher in-game sensitivity is a workable fix."}},
+{"@type":"Question","name":"Can software or drivers fix a sensor that loses tracking?","acceptedAnswer":{"@type":"Answer","text":"No. Movement the sensor never measured cannot be restored afterwards. The only workaround is to raise your in-game sensitivity so your hand moves slower than the speed where the sensor fails."}},
+{"@type":"Question","name":"Is my data uploaded when I run the test?","acceptedAnswer":{"@type":"Answer","text":"No. The test runs entirely in your browser and nothing is sent anywhere."}}
+]}</script>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--line:#2a2f3a;--text:#e7e9ee;--mute:#9aa1ad;--acc:#4f8cff;--good:#2fbf71;--warn:#e6a23c;--bad:#ef5350}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font:17px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:24px 20px 40px}
+  nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;font-size:15px}
+  nav a{color:var(--mute);text-decoration:none} nav a:hover{color:var(--text)}
+  h1{font-size:34px;line-height:1.2;margin:0 0 12px;letter-spacing:-.01em}
+  .lead{color:#c3c8d2;font-size:19px;margin:0 0 24px}
+  h2{font-size:24px;margin:40px 0 10px;line-height:1.3}
+  h3{font-size:19px;margin:24px 0 6px}
+  p{margin:0 0 14px} ul,ol{margin:0 0 16px;padding-inline-start:22px} li{margin:6px 0}
+  a{color:var(--acc)}
+  .cta{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;font-weight:700;border-radius:10px;padding:12px 20px;margin:6px 0 8px}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0}
+  .box.warn{border-color:#5a4418;background:#22190a}
+  table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:15px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mute);font-weight:600}
+  .tag{display:inline-block;font-weight:700;font-size:13px;padding:1px 8px;border-radius:6px}
+  .t-short{background:#3d1919;color:#ff9a98}.t-long{background:#3a2c12;color:#f3c77a}.t-spin{background:#2b1d3d;color:#cfa8ff}
+  footer{color:var(--mute);font-size:14px;margin-top:40px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="/">← Mouse Sensor Test</a><a href="/">Start the free test</a></nav>
+
+  <h1>How to tell if your mouse sensor is faulty</h1>
+  <p class="lead">You swing hard in a game and the crosshair moves less than your hand did, or it snaps backwards. Sometimes it's fine, sometimes it isn't. Here's what's actually going on, how to test it in two minutes, and how to prove it to the seller.</p>
+  <a class="cta" href="/">Run the free mouse sensor test →</a>
+
+  <h2>The symptoms</h2>
+  <ul>
+    <li><b>Big flicks fall short.</b> You move your arm the usual distance, but the view turns much less than expected.</li>
+    <li><b>The crosshair jumps backwards or to the floor</b> in the middle of a fast swing. This is called a <b>spin-out</b>.</li>
+    <li><b>It's inconsistent.</b> Slow aiming feels perfect, but fast movements are unpredictable.</li>
+    <li><b>Your aim drifts</b>: after a few fast swings, the mouse is in a different spot on the pad for the same view.</li>
+  </ul>
+
+  <h2>What's actually happening</h2>
+  <p>Every mouse sensor has a <b>maximum tracking speed</b>, usually given in IPS (inches per second), and a <b>maximum acceleration</b>, given in G. Below those limits it reports every movement correctly. Above them, it starts missing movement, and sometimes reports movement in the wrong direction.</p>
+  <table>
+    <tr><th>Sensor class</th><th>Typical rated speed</th><th>In metres per second</th></tr>
+    <tr><td>Entry-level / office sensors</td><td>about 30–60 IPS</td><td>about 0.8–1.5 m/s</td></tr>
+    <tr><td>Mid-range gaming sensors</td><td>about 200–400 IPS</td><td>about 5–10 m/s</td></tr>
+    <tr><td>Current flagship gaming sensors</td><td>400–750 IPS</td><td>about 10–19 m/s</td></tr>
+  </table>
+  <p>A hard flick at low in-game sensitivity can easily reach 2–4 m/s. So a mouse with an entry-level sensor can be "working as designed" and still fail on normal gaming movements, while a proper gaming sensor will never get close to its limit.</p>
+  <div class="box"><b>Watch out for "DPI" on the box.</b> A big DPI number (8,000, 12,000…) says nothing about tracking speed. Look for the sensor's name or its IPS rating instead.</div>
+
+  <h3>The three ways it shows up</h3>
+  <ul>
+    <li><span class="tag t-short">SHORT</span> <b>Tracking loss / negative acceleration:</b> the sensor drops part of the movement, so fast swipes register less distance than slow ones.</li>
+    <li><span class="tag t-spin">spin-out</span> <b>Spin-out:</b> the sensor reports some movement in the opposite direction. In games, the view jerks back or down.</li>
+    <li><span class="tag t-long">LONG</span> <b>Over-counting:</b> rarer. The sensor adds movement that didn't happen.</li>
+  </ul>
+
+  <h2>Is it the sensor, or something else?</h2>
+  <p>Rule these out first. They cause similar symptoms:</p>
+  <ul>
+    <li><b>Lifting the mouse during big swings.</b> If the mouse leaves the pad, it stops tracking. That's normal, not a fault.</li>
+    <li><b>The surface.</b> Glossy, glass, very worn or patterned pads can confuse sensors. Try a plain cloth pad.</li>
+    <li><b>A dirty sensor window.</b> Gently clean the lens underneath with a dry cotton bud.</li>
+    <li><b>Wireless problems.</b> Low battery, or the receiver far away behind the PC. Use a USB extender to bring it near the mouse, or test wired.</li>
+    <li><b>Windows acceleration.</b> "Enhance pointer precision" changes how the desktop cursor moves. Most games use raw input and ignore it, and so does this test in Chrome and Edge.</li>
+    <li><b>A DPI button pressed by accident</b>, which changes sensitivity rather than causing tracking loss.</li>
+  </ul>
+
+  <h2>How to test it properly</h2>
+  <p>The idea is simple: move the mouse the <b>exact same distance</b> slowly and then fast, and compare what the sensor reports. A healthy sensor reports the same number at any speed.</p>
+  <ol>
+    <li><b>Set up two hard stops</b> on your mousepad, 15–40 cm apart. Books, a ruler or the pad edges all work. The mouse must touch a stop at both ends of every swipe, so every swipe covers the same distance.</li>
+    <li><b>Open the <a href="/">mouse sensor test</a> in Chrome or Edge</b> on your computer, enter your mouse's DPI, and click the test area to lock the mouse.</li>
+    <li><b>Baseline:</b> do about 6 slow, careful swipes from stop to stop. These set the correct count for your distance. They should agree within 2–3%.</li>
+    <li><b>Test:</b> flick hard between the stops, as fast as you do in games. Do at least 10.</li>
+    <li><b>After every swipe, hold the mouse still against the stop</b> until it says Saved, and never lift the mouse.</li>
+  </ol>
+
+  <h2>How to read the results</h2>
+  <ul>
+    <li><b>PASS:</b> fast swipes match the baseline. The sensor keeps up with your hand.</li>
+    <li><b>POSSIBLE PROBLEM:</b> a few fast swipes were off. Do more swipes. If the misses keep coming, treat it as a fail.</li>
+    <li><b>FAIL:</b> fast swipes regularly come up short, long or spin out. The sensor is losing tracking.</li>
+  </ul>
+  <p>One thing that surprises people: <b>the speeds shown for failed swipes are lower than your real hand speed.</b> Speed is calculated from what the sensor reports, so when it loses tracking, it also under-reports how fast you moved. If the reported speed of your failed swipes seems to hit a ceiling, that ceiling is roughly where the sensor gives up.</p>
+  <div class="box"><b>A useful extra check:</b> run the test at two different DPI settings. If the failures start at the same hand speed both times, it's the sensor's speed limit. If a lower DPI makes the problem go away, the mouse is struggling with high count rates instead, and playing at lower DPI with higher in-game sensitivity is a practical fix.</div>
+
+  <h2>Faulty unit, or just a weak sensor?</h2>
+  <p>Find the sensor's rated speed (IPS) in the product specs or by searching the sensor's model name.</p>
+  <ul>
+    <li><b>It fails well below its rated speed:</b> that's a faulty unit. Ask for a replacement under warranty.</li>
+    <li><b>It only fails above its rated speed:</b> the mouse is working as designed, but it isn't fast enough for how you use it. A return is still often possible within the shop's return window, especially if it was sold as a gaming mouse. Check the shop's return policy.</li>
+    <li><b>Not sure?</b> Test a friend's mouse, ideally the same model. If theirs passes and yours fails, your unit is faulty.</li>
+  </ul>
+
+  <h2>How to prove it to the seller</h2>
+  <ol>
+    <li>Run the test and press <b>Copy report</b>. It lists every swipe, the baseline, the result and the method.</li>
+    <li><b>Record your screen</b> (and ideally your hand on the pad) while you do the test, so it's clear the mouse is hitting the stops.</li>
+    <li>If you can, repeat it at a second DPI setting, and test another mouse on the same pad as a comparison.</li>
+    <li>Send the report and the video together. Numbers plus a video are hard to argue with.</li>
+  </ol>
+  <div class="box warn"><b>Be fair to the seller:</b> if the sensor is only failing above its rated speed, describe it as "not able to track fast gaming movements" rather than "broken". You're more likely to get a smooth return that way.</div>
+
+  <h2>FAQ</h2>
+  <h3>Will a higher polling rate fix it?</h3>
+  <p>No. The polling (report) rate only controls how often the mouse reports to the PC. If the sensor can't keep up with your hand, a higher rate just sends the same wrong numbers more often.</p>
+  <h3>Does lowering DPI help?</h3>
+  <p>Usually not. A sensor's speed limit is about how fast it physically moves, so it fails at the same hand speed at any DPI. If lowering DPI does fix it, use lower DPI with higher in-game sensitivity.</p>
+  <h3>Can software or drivers fix it?</h3>
+  <p>No. Movement the sensor never measured can't be recovered. The only workaround is raising your in-game sensitivity so your hand moves slower than the speed where the sensor fails.</p>
+  <h3>Why Chrome or Edge?</h3>
+  <p>They can read raw movement straight from the sensor, bypassing Windows acceleration. Firefox works but can't read raw data, and phones and tablets can't run the test.</p>
+  <h3>Is my data uploaded?</h3>
+  <p>No. The test runs entirely in your browser and nothing is sent anywhere.</p>
+
+  <p style="margin-top:30px"><a class="cta" href="/">Test your mouse now →</a></p>
+  <footer>Free to use. Made to help people check a mouse before trusting it, or prove a fault when returning it.</footer>
+</div>
+</body>
+</html>

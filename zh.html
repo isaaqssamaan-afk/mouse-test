@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鼠标传感器测试:检测丢失追踪、甩飞和负加速</title>
+<meta name="description" content="免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。">
+<link rel="canonical" href="https://mouse-test.pages.dev/zh">
+<link rel="alternate" hreflang="en" href="https://mouse-test.pages.dev/">
+<link rel="alternate" hreflang="ar" href="https://mouse-test.pages.dev/ar">
+<link rel="alternate" hreflang="es" href="https://mouse-test.pages.dev/es">
+<link rel="alternate" hreflang="pt" href="https://mouse-test.pages.dev/pt">
+<link rel="alternate" hreflang="de" href="https://mouse-test.pages.dev/de">
+<link rel="alternate" hreflang="zh-Hans" href="https://mouse-test.pages.dev/zh">
+<link rel="alternate" hreflang="x-default" href="https://mouse-test.pages.dev/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="鼠标传感器测试">
+<meta property="og:title" content="鼠标传感器测试:检测丢失追踪、甩飞和负加速">
+<meta property="og:description" content="免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。">
+<meta property="og:url" content="https://mouse-test.pages.dev/zh">
+<meta property="og:image" content="https://mouse-test.pages.dev/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0f1115">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"鼠标传感器测试","description":"免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。","url":"https://mouse-test.pages.dev/zh","inLanguage":"zh","applicationCategory":"UtilitiesApplication","operatingSystem":"Windows, macOS, Linux, ChromeOS","browserRequirements":"Chrome or Edge on a desktop computer with a mouse","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--panel2:#12151b;--line:#2a2f3a;--text:#e7e9ee;--mute:#9aa1ad;--acc:#4f8cff;--good:#2fbf71;--warn:#e6a23c;--bad:#ef5350}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Arabic","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1120px;margin:0 auto;padding:20px}
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+  h1{font-size:26px;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--mute);margin:0;max-width:720px}
+  .privacy{display:inline-block;margin-top:8px;font-size:13px;color:#8be3b0;background:#132a1e;border:1px solid #1f4a33;border-radius:99px;padding:2px 10px}
+  /* language picker */
+  .lang{position:relative}
+  .lang button{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:99px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600}
+  .lang button.pulse{animation:pulse 1.6s ease-out 3}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,140,255,.7)}100%{box-shadow:0 0 0 14px rgba(79,140,255,0)}}
+  .lang ul{position:absolute;inset-inline-end:0;top:calc(100% + 6px);list-style:none;margin:0;padding:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;min-width:180px;z-index:20;display:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .lang ul.open{display:block}
+  .lang li button{width:100%;border:0;border-radius:8px;background:transparent;font-weight:500;justify-content:space-between}
+  .lang li button:hover,.lang li button[aria-current=true]{background:#1d2740}
+  .toast{position:fixed;bottom:20px;inset-inline-start:50%;transform:translateX(-50%);background:#1d2740;border:1px solid var(--acc);color:var(--text);padding:10px 16px;border-radius:12px;z-index:30;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:opacity .4s;max-width:92vw}
+  [dir=rtl] .toast{transform:translateX(50%)}
+  .toast button{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit}
+  .alert{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-weight:500}
+  .alert.warn{background:#3a2c12;color:#f3c77a;border:1px solid #5a4418}
+  .alert.bad{background:#3d1919;color:#ff9a98;border:1px solid #5e2525}
+  .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h2{margin:0 0 10px;font-size:17px}
+  ol{margin:0;padding-inline-start:20px}
+  li{margin:6px 0}
+  #pad{height:250px;border:2px dashed var(--line);border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;user-select:none;padding:14px;color:var(--mute);outline:none}
+  #pad.locked{border-color:var(--acc);border-style:solid;color:var(--text);background:#141a28}
+  .big{font-size:26px;font-weight:700}
+  .rec{font-weight:700;margin:6px 0}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .stat b{display:block;font-size:18px;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate;text-align:left}
+  [dir=rtl] .stat b{text-align:right}
+  .stat span{color:var(--mute);font-size:12px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  label{display:flex;gap:8px;align-items:center}
+  input[type=number]{width:96px;background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:7px;font:inherit}
+  .muted{color:var(--mute)}
+  .small{font-size:13px}
+  .btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit;font-weight:600}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--text);font-weight:500}
+  .phase{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:700;font-size:13px}
+  .phase.base{background:#1d2740;color:#9fc0ff}.phase.test{background:#3a2c12;color:#f3c77a}
+  canvas{direction:ltr;width:100%;height:280px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;display:block}
+  .verdict{padding:12px 14px;border-radius:10px;margin-top:12px;font-weight:600}
+  .verdict .head{font-size:20px;font-weight:800;display:block;margin-bottom:4px}
+  .v-good{background:#163323;color:#8be3b0}.v-warn{background:#3a2c12;color:#f3c77a}.v-bad{background:#3d1919;color:#ff9a98}.v-none{background:#1c2029;color:var(--mute)}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:13px}
+  th,td{text-align:end;padding:5px 6px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:start}
+  .tbl{max-height:300px;overflow:auto}
+  tr.flag td{color:var(--bad)} tr.dim td{color:var(--mute)}
+  textarea{width:100%;height:200px;background:#0c0e12;color:var(--text);border:1px solid var(--line);border-radius:8px;font:12px/1.45 ui-monospace,Consolas,monospace;padding:10px;direction:ltr;text-align:left}
+  kbd{background:#222733;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:12px}
+  a.guide{color:var(--acc);font-weight:600;text-decoration:none}
+  a.guide:hover{text-decoration:underline}
+  footer{color:var(--mute);font-size:13px;margin:24px 0 10px;text-align:center}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 data-i18n="title">鼠标传感器测试</h1>
+      <p class="sub" data-i18n="tagline">检测你的鼠标在快速移动时是否会丢失追踪(甩飞、负加速),并生成一份可以发给卖家的报告。</p>
+      <span class="privacy" data-i18n="privacy">🔒 完全在你的浏览器中运行,不会上传任何数据。</span>
+    </div>
+    <div class="lang">
+      <button id="langBtn" aria-haspopup="listbox"><span aria-hidden="true">🌐</span><span id="langName">中文</span><span aria-hidden="true">▾</span></button>
+      <ul id="langList" role="listbox"></ul>
+    </div>
+  </header>
+
+  <div id="envAlert" class="alert hide"></div>
+
+  <div class="grid">
+    <div class="card">
+      <div id="pad" tabindex="0"><div id="padText"></div></div>
+      <div class="stats">
+        <div class="stat"><b id="sPoll">–</b><span data-i18n="stPoll">回报率(Hz,当前 / 最高)</span></div>
+        <div class="stat"><b id="sRaw">–</b><span data-i18n="stRaw">传感器原始数据</span></div>
+        <div class="stat"><b id="sSpeed">–</b><span data-i18n="stSpeed">上次滑动的峰值速度</span></div>
+      </div>
+      <div class="row">
+        <label><span data-i18n="dpi">鼠标 DPI</span> <input type="number" id="cpi" value="800" min="50" step="50"></label>
+        <label><span data-i18n="baseN">基准滑动次数</span> <input type="number" id="baseN" value="6" min="3" max="20"></label>
+      </div>
+      <p class="muted small" data-i18n="dpiHint" style="margin:6px 0 0">请填写鼠标实际设置的 DPI(可在驱动软件或 DPI 按键中查看)。它只影响厘米和米/秒的数值,不影响测试结论。</p>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="howTitle">测试方法</h2>
+      <ol>
+        <li data-i18n="step1"><b>在鼠标垫上放两个固定挡块</b>,相距 15–40 厘米:可以用书、尺子或鼠标垫边缘。每次滑动时,鼠标两端都必须碰到挡块。</li>
+        <li data-i18n="step2"><b>输入鼠标当前的 DPI</b>,然后点击测试区域锁定鼠标。</li>
+        <li data-i18n="step3"><b>第 1 阶段,基准:</b>在两个挡块之间慢慢地、仔细地滑动。来回滑动都可以。测试会自动进入下一阶段。</li>
+        <li data-i18n="step4"><b>第 2 阶段,测试:</b>在挡块之间用力快速甩动,就像玩游戏时一样。至少做 10 次。</li>
+        <li data-i18n="step5">每次滑动后,<b>让鼠标贴着挡块保持不动</b>,直到显示“已保存”。全程不要抬起鼠标。</li>
+      </ol>
+      <p class="muted small" data-i18n="step6" style="margin-bottom:0">每次滑动的距离都相同,所以正常的传感器在任何速度下都会报告相同的数值。如果快速滑动的数值偏小,说明传感器在丢失追踪。</p>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:14px">
+    <div class="card">
+      <div class="row" style="margin-top:0;justify-content:space-between">
+        <h2 data-i18n="chartTitle" style="margin:0">每次滑动的计数与速度</h2>
+        <span><span data-i18n="phase">阶段</span>: <span id="phaseLbl" class="phase base"></span></span>
+      </div>
+      <canvas id="chart" style="margin-top:10px"></canvas>
+      <p class="muted small" data-i18n="chartHint" style="margin:6px 0 0">每个点都应落在蓝线上。蓝色为基准滑动,绿色为正确的测试滑动,红色为传感器测错的滑动。</p>
+      <div id="verdict" class="verdict v-none"></div>
+    </div>
+    <div class="card">
+      <h2><span data-i18n="tableTitle">滑动记录</span> <span class="muted" id="nSw">0</span></h2>
+      <div class="tbl"><table>
+        <thead><tr><th>#</th><th data-i18n="thCounts">计数</th><th data-i18n="thPct">占基准 %</th><th data-i18n="thSpeed">速度 m/s</th><th data-i18n="thBack">反向 %</th><th data-i18n="thStatus">状态</th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table></div>
+      <div class="row">
+        <button class="btn ghost" id="undo" data-i18n="undo">撤销上一次</button>
+        <button class="btn ghost" id="redoBase" data-i18n="redo">重做基准</button>
+        <button class="btn ghost" id="clear" data-i18n="clear">全部清除</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h2 data-i18n="reportTitle">给卖家的报告</h2>
+    <p class="muted small" data-i18n="reportHint" style="margin-top:0">复制这份报告,并附上一段你做测试时的简短录屏一起发送。</p>
+    <textarea id="rep" readonly></textarea>
+    <div class="row"><button class="btn" id="copyBtn" data-i18n="copy">复制报告</button><span id="copyMsg" class="muted"></span></div>
+  </div>
+
+  <section class="card" style="margin-top:14px">
+    <h2 data-i18n="aboutTitle">这个测试检测什么</h2>
+    <p data-i18n="aboutBody" style="margin:0 0 10px">每个鼠标传感器都有一个能正常追踪的最高速度。超过这个速度时,好的传感器仍然能记录每一毫米,而性能弱或有故障的传感器会开始丢失移动:在游戏中准星移动得比你的手少,或者突然往回跳(甩飞)。本测试绕过 Windows 加速,直接读取传感器的原始数据,并在完全相同的距离上比较快速滑动和慢速滑动。如果快速滑动的数值偏小,说明传感器在丢失追踪,报告会给出证明这一点的数据。</p>
+    <a class="guide" href="/guide" data-i18n="guideLink">阅读指南(英文):如何判断鼠标传感器是否有故障 →</a>
+  </section>
+
+  <footer data-i18n="footer">免费使用。帮助大家在信任一只鼠标之前先检查它,或在退货时证明故障。</footer>
+</div>
+
+<script>
+/* ================= translations ================= */
+const LANGS = {
+  en: { name: 'English', dir: 'ltr' }, ar: { name: 'العربية', dir: 'rtl' }, es: { name: 'Español', dir: 'ltr' },
+  pt: { name: 'Português', dir: 'ltr' }, de: { name: 'Deutsch', dir: 'ltr' }, zh: { name: '中文', dir: 'ltr' }
+};
+const I18N = {
+en: {
+  title: 'Mouse Sensor Test',
+  tagline: 'Find out if your mouse loses tracking on fast movements (spin-outs, negative acceleration), and get a report you can send to the seller.',
+  privacy: '🔒 Runs entirely in your browser. Nothing is uploaded.',
+  toast: 'Showing this page in {lang}, based on your browser.', toastKeep: 'OK', toastChange: 'Change',
+  envMobile: 'This test needs a computer with a mouse. It won\'t work on a phone or tablet.',
+  envNoLock: 'Your browser can\'t lock the mouse. Please use Chrome or Edge on a computer.',
+  envFirefox: 'Firefox works, but it can\'t read raw sensor data. For the most accurate result use Chrome or Edge, or turn off "Enhance pointer precision" in Windows mouse settings.',
+  howTitle: 'How to test',
+  step1: '<b>Set up two hard stops</b> on your mousepad, 15–40 cm apart: books, a ruler or the pad\'s edges. The mouse must touch a stop at both ends of every swipe.',
+  step2: '<b>Enter the DPI</b> your mouse is set to, then click the test area to lock the mouse.',
+  step3: '<b>Phase 1, baseline:</b> do slow, careful swipes from stop to stop. Back and forth is fine. The test moves on by itself.',
+  step4: '<b>Phase 2, test:</b> flick hard between the stops, as fast as you would in a game. Do at least 10.',
+  step5: 'After every swipe, <b>hold the mouse still against the stop</b> until it says Saved. Never lift the mouse.',
+  step6: 'Every swipe covers the same distance, so a healthy sensor reports the same count at any speed. Fast swipes that come up short mean the sensor is losing tracking.',
+  dpi: 'Mouse DPI', baseN: 'Baseline swipes', dpiHint: 'Use the DPI your mouse is actually set to (check its software or DPI button). It only affects the cm and m/s figures, not the verdict.',
+  padStart: 'Click here to start', padEsc: 'Press <kbd>Esc</kbd> any time to release the mouse',
+  padBase: 'Phase 1: slow baseline swipes', padTest: 'Phase 2: flick hard',
+  padHint: 'Hold still at each stop until it says Saved · <kbd>Z</kbd> undo · <kbd>B</kbd> redo baseline · <kbd>Esc</kbd> release',
+  rec: '● Recording swipe…', saved: '✓ Saved, ready for the next swipe', ready: '✓ Ready',
+  lockBlocked: 'The browser blocked the mouse lock. Open this page in its own tab in Chrome or Edge and try again.',
+  noRaw: 'Raw input isn\'t available in this browser. Turn off "Enhance pointer precision" in Windows mouse settings for accurate results.',
+  stPoll: 'Report rate (Hz, now / max)', stRaw: 'Raw sensor input', stSpeed: 'Last swipe peak speed', rawOn: 'On ✓', rawOff: 'Off ⚠',
+  phase: 'Phase', phaseBase: '1 · Baseline', phaseTest: '2 · Test',
+  undo: 'Undo last', redo: 'Redo baseline', clear: 'Clear all',
+  chartTitle: 'Counts per swipe vs speed', chartHint: 'Every dot should sit on the blue line. Blue dots are baseline swipes, green are correct test swipes, red are swipes the sensor got wrong.',
+  axSpeed: 'peak speed (m/s)', axCounts: 'counts', chartEmpty: 'Your swipes will appear here',
+  tableTitle: 'Swipes', thCounts: 'Counts', thPct: '% of baseline', thSpeed: 'Peak m/s', thBack: 'Backward %', thStatus: 'Status',
+  stBase: 'baseline', stBaseX: 'baseline (excluded)', stOk: 'ok', stShort: 'SHORT', stLong: 'LONG', stSpin: 'spin-out', stIgnored: 'ignored',
+  vNeedBase: 'Phase 1: do {n} slow baseline swipes ({k}/{n} so far).',
+  vBaseBad: 'Your baseline swipes differ by up to {s}%. They should agree within about 2–3%, so the mouse probably isn\'t reaching the stops every time. Press B to redo the baseline.',
+  vBaseOk: 'Baseline set: {c} counts = {cm} cm (±{s}%). Now flick hard between the stops: {n} of at least 10 test swipes done.',
+  vPassH: 'PASS', vWarnH: 'POSSIBLE PROBLEM', vFailH: 'FAIL',
+  vPass: '{ok} of {n} fast swipes were correct. Your sensor tracks fast movement properly.',
+  vWarn: '{bad} of {n} fast swipes were wrong. Do more swipes to confirm.',
+  vFail: '{bad} of {n} fast swipes were wrong. The sensor is losing tracking on fast movements.',
+  vDetail: '{short} short (median {med}% of the real distance), {long} long, {spin} spin-outs. Fastest reported speed: {v} m/s.',
+  vSlow: 'Your fastest swipe was under 2 m/s. Flick harder to properly stress the sensor.',
+  vCapped: 'Speeds are measured from what the sensor reports, so when it loses tracking, your real hand speed was higher than shown.',
+  vIgnored: '{k} swipe(s) ignored: no pause at the stop.',
+  reportTitle: 'Report for the seller', reportHint: 'Copy this and send it together with a short screen recording of you doing the test.',
+  copy: 'Copy report', copied: 'Copied.', copyFail: 'Select the text and press Ctrl+C.',
+  rTitle: 'MOUSE SENSOR TEST REPORT', rDate: 'Date', rBrowser: 'Browser', rRaw: 'Raw sensor input', rDpi: 'DPI set', rPoll: 'Report rate observed',
+  rBase: 'Baseline', rBaseLine: '{c} counts = {cm} cm (median of {k} slow swipes, ±{s}%)', rTests: 'Test swipes',
+  rTestLine: '{n} · correct: {ok} · short: {short} · long: {long} · spin-out: {spin}', rResult: 'Result', rSwipes: 'Swipes', rPhaseBase: 'baseline', rPhaseTest: 'test',
+  rNone: '(no swipes recorded yet)',
+  rMethod: 'Method: the browser\'s pointer lock reads raw sensor counts (operating-system acceleration bypassed). The mouse is swiped between two fixed stops, so every swipe covers the same physical distance. A working sensor reports the same count at any speed.',
+  footer: 'Free to use. Made to help people check a mouse before trusting it, or prove a fault when returning it.',
+  metaTitle: "Mouse Sensor Test: check for tracking loss, spin-outs and negative acceleration",
+  metaDesc: "Free online mouse sensor test. Find out if your mouse loses tracking on fast flicks (spin-outs, negative acceleration) and get a report to send to the seller. Runs in your browser, nothing is uploaded.",
+  aboutTitle: "What this test checks",
+  aboutBody: "A mouse sensor has a maximum speed it can track. Above it, a good sensor still reports every millimetre, while a weak or faulty one starts losing movement: in games your crosshair moves less than your hand, or jumps backwards (a spin-out). This test reads the raw counts straight from the sensor, bypassing Windows acceleration, and compares fast swipes with slow ones over the exact same distance. If fast swipes come up short, the sensor is losing tracking, and the report gives you the numbers to prove it.",
+  guideLink: "Read the guide: how to tell if your mouse sensor is faulty →"
+},
+ar: {
+  title: 'اختبار حساس الماوس',
+  tagline: 'اعرف إذا كان الماوس بيفقد التتبع في الحركات السريعة (spin-out أو negative acceleration)، واحصل على تقرير تقدر تبعته للبائع.',
+  privacy: '🔒 الاختبار كله بيشتغل في المتصفح بتاعك. مفيش أي حاجة بتترفع.',
+  toast: 'الصفحة معروضة بـ{lang} حسب لغة المتصفح.', toastKeep: 'تمام', toastChange: 'تغيير',
+  envMobile: 'الاختبار ده محتاج كمبيوتر وماوس. مش هيشتغل على موبايل أو تابلت.',
+  envNoLock: 'المتصفح ده مش بيقدر يقفل الماوس. استخدم Chrome أو Edge على كمبيوتر.',
+  envFirefox: 'Firefox شغال، بس مش بيقرأ بيانات الحساس الخام. لأدق نتيجة استخدم Chrome أو Edge، أو اقفل "Enhance pointer precision" من إعدادات الماوس في ويندوز.',
+  howTitle: 'طريقة الاختبار',
+  step1: '<b>حط حاجزين ثابتين</b> على الماوس باد، المسافة بينهم من ١٥ لـ٤٠ سم: كتب أو مسطرة أو أطراف الباد. لازم الماوس يلمس الحاجز عند الطرفين في كل سحبة.',
+  step2: '<b>اكتب الـDPI</b> اللي الماوس شغال عليه، وبعدين اضغط على منطقة الاختبار علشان يتقفل الماوس.',
+  step3: '<b>المرحلة ١، الأساس:</b> اسحب الماوس ببطء وبهدوء من حاجز للتاني. رايح جاي عادي. الاختبار هينتقل للمرحلة اللي بعدها لوحده.',
+  step4: '<b>المرحلة ٢، الاختبار:</b> اسحب بسرعة وبقوة بين الحاجزين، زي ما بتعمل في الألعاب. اعمل ١٠ سحبات على الأقل.',
+  step5: 'بعد كل سحبة <b>ثبّت الماوس على الحاجز</b> لحد ما يظهر "تم الحفظ". متشيلش الماوس من على الباد خالص.',
+  step6: 'كل سحبة بتقطع نفس المسافة، فالحساس السليم بيسجل نفس الرقم مهما كانت السرعة. لو السحبات السريعة طلعت أقصر، يبقى الحساس بيفقد التتبع.',
+  dpi: 'DPI الماوس', baseN: 'عدد سحبات الأساس', dpiHint: 'استخدم الـDPI اللي الماوس شغال عليه فعلاً (من البرنامج بتاعه أو زرار الـDPI). ده بيأثر بس على أرقام السم والسرعة، مش على النتيجة.',
+  padStart: 'اضغط هنا للبدء', padEsc: 'اضغط <kbd>Esc</kbd> في أي وقت لفك الماوس',
+  padBase: 'المرحلة ١: سحبات أساس بطيئة', padTest: 'المرحلة ٢: اسحب بقوة',
+  padHint: 'ثبّت عند كل حاجز لحد ما يظهر "تم الحفظ" · <kbd>Z</kbd> تراجع · <kbd>B</kbd> إعادة الأساس · <kbd>Esc</kbd> فك',
+  rec: '● جاري تسجيل السحبة…', saved: '✓ تم الحفظ، جاهز للسحبة اللي بعدها', ready: '✓ جاهز',
+  lockBlocked: 'المتصفح منع قفل الماوس. افتح الصفحة في تاب لوحدها على Chrome أو Edge وجرب تاني.',
+  noRaw: 'البيانات الخام مش متاحة في المتصفح ده. اقفل "Enhance pointer precision" من إعدادات الماوس في ويندوز علشان النتيجة تبقى دقيقة.',
+  stPoll: 'معدل الإرسال (Hz، الحالي / الأقصى)', stRaw: 'بيانات الحساس الخام', stSpeed: 'أقصى سرعة لآخر سحبة', rawOn: 'شغالة ✓', rawOff: 'مقفولة ⚠',
+  phase: 'المرحلة', phaseBase: '١ · الأساس', phaseTest: '٢ · الاختبار',
+  undo: 'تراجع عن الأخيرة', redo: 'إعادة الأساس', clear: 'مسح الكل',
+  chartTitle: 'عدد النقاط لكل سحبة مقابل السرعة', chartHint: 'كل نقطة المفروض تبقى على الخط الأزرق. الأزرق سحبات الأساس، الأخضر سحبات اختبار سليمة، الأحمر سحبات الحساس غلط فيها.',
+  axSpeed: 'أقصى سرعة (م/ث)', axCounts: 'counts', chartEmpty: 'السحبات بتاعتك هتظهر هنا',
+  tableTitle: 'السحبات', thCounts: 'Counts', thPct: '% من الأساس', thSpeed: 'السرعة م/ث', thBack: '% للخلف', thStatus: 'الحالة',
+  stBase: 'أساس', stBaseX: 'أساس (مستبعدة)', stOk: 'سليمة', stShort: 'أقصر', stLong: 'أطول', stSpin: 'spin-out', stIgnored: 'متجاهلة',
+  vNeedBase: 'المرحلة ١: اعمل {n} سحبات أساس بطيئة ({k}/{n} لحد دلوقتي).',
+  vBaseBad: 'سحبات الأساس مختلفة عن بعض لحد {s}%. المفروض تبقى متقاربة في حدود ٢–٣%، فغالباً الماوس مش بيوصل للحاجز كل مرة. اضغط B لإعادة الأساس.',
+  vBaseOk: 'تم تحديد الأساس: {c} نقطة = {cm} سم (±{s}%). دلوقتي اسحب بقوة بين الحاجزين: خلصت {n} من ١٠ سحبات على الأقل.',
+  vPassH: 'ناجح', vWarnH: 'ممكن يكون فيه مشكلة', vFailH: 'فاشل',
+  vPass: '{ok} من {n} سحبات سريعة كانت صح. الحساس بيتتبع الحركة السريعة كويس.',
+  vWarn: '{bad} من {n} سحبات سريعة كانت غلط. اعمل سحبات أكتر علشان تتأكد.',
+  vFail: '{bad} من {n} سحبات سريعة كانت غلط. الحساس بيفقد التتبع في الحركات السريعة.',
+  vDetail: '{short} أقصر (في المتوسط {med}% من المسافة الحقيقية)، {long} أطول، {spin} spin-out. أعلى سرعة سجلها الحساس: {v} م/ث.',
+  vSlow: 'أسرع سحبة كانت أقل من ٢ م/ث. اسحب بقوة أكتر علشان تختبر الحساس صح.',
+  vCapped: 'السرعة بتتحسب من اللي الحساس بيبعته، فلما بيفقد التتبع، سرعة إيدك الحقيقية بتبقى أعلى من الظاهرة.',
+  vIgnored: '{k} سحبة اتجاهلت: مفيش وقفة عند الحاجز.',
+  reportTitle: 'تقرير للبائع', reportHint: 'انسخ التقرير وابعته مع فيديو قصير لشاشتك وإنت بتعمل الاختبار.',
+  copy: 'نسخ التقرير', copied: 'تم النسخ.', copyFail: 'حدد النص واضغط Ctrl+C.',
+  rTitle: 'تقرير اختبار حساس الماوس', rDate: 'التاريخ', rBrowser: 'المتصفح', rRaw: 'بيانات الحساس الخام', rDpi: 'الـDPI', rPoll: 'معدل الإرسال المسجل',
+  rBase: 'الأساس', rBaseLine: '{c} نقطة = {cm} سم (وسيط {k} سحبات بطيئة، ±{s}%)', rTests: 'سحبات الاختبار',
+  rTestLine: '{n} · سليمة: {ok} · أقصر: {short} · أطول: {long} · spin-out: {spin}', rResult: 'النتيجة', rSwipes: 'السحبات', rPhaseBase: 'أساس', rPhaseTest: 'اختبار',
+  rNone: '(لسه مفيش سحبات متسجلة)',
+  rMethod: 'الطريقة: خاصية قفل الماوس في المتصفح بتقرأ بيانات الحساس الخام (من غير تسارع نظام التشغيل). الماوس بيتسحب بين حاجزين ثابتين، فكل سحبة بتقطع نفس المسافة الفعلية. الحساس السليم بيسجل نفس الرقم مهما كانت السرعة.',
+  footer: 'مجاني. معمول علشان يساعد الناس يتأكدوا من الماوس قبل ما يعتمدوا عليه، أو يثبتوا العيب لما يرجعوه.',
+  metaTitle: "اختبار حساس الماوس: افحص فقدان التتبع والـspin-out والـnegative acceleration",
+  metaDesc: "اختبار مجاني أونلاين لحساس الماوس. اعرف إذا كان الماوس بيفقد التتبع في الحركات السريعة واحصل على تقرير تبعته للبائع. بيشتغل في المتصفح ومفيش حاجة بتترفع.",
+  aboutTitle: "الاختبار ده بيفحص إيه؟",
+  aboutBody: "كل حساس ماوس ليه أقصى سرعة يقدر يتتبعها. الحساس الكويس بيسجل كل مليمتر حتى في الحركات السريعة، لكن الحساس الضعيف أو البايظ بيبدأ يضيّع جزء من الحركة: في الألعاب الـcrosshair بيتحرك أقل من إيدك، أو بينط لورا (spin-out). الاختبار ده بيقرأ الأرقام الخام من الحساس مباشرة، من غير تسارع ويندوز، وبيقارن السحبات السريعة بالبطيئة على نفس المسافة بالظبط. لو السحبات السريعة طلعت أقصر، يبقى الحساس بيفقد التتبع، والتقرير بيديك الأرقام اللي تثبت ده.",
+  guideLink: "اقرأ الدليل (بالإنجليزي): إزاي تعرف إن حساس الماوس بايظ ←"
+},
+es: {
+  title: 'Test del sensor del ratón',
+  tagline: 'Descubre si tu ratón pierde el seguimiento en movimientos rápidos (spin-outs, aceleración negativa) y obtén un informe para enviar al vendedor.',
+  privacy: '🔒 Funciona solo en tu navegador. No se sube nada.',
+  toast: 'Mostrando esta página en {lang} según tu navegador.', toastKeep: 'Vale', toastChange: 'Cambiar',
+  envMobile: 'Esta prueba necesita un ordenador con ratón. No funciona en móvil ni tableta.',
+  envNoLock: 'Tu navegador no puede bloquear el ratón. Usa Chrome o Edge en un ordenador.',
+  envFirefox: 'Firefox funciona, pero no puede leer los datos en bruto del sensor. Para el resultado más preciso usa Chrome o Edge, o desactiva "Mejorar la precisión del puntero" en la configuración del ratón de Windows.',
+  howTitle: 'Cómo hacer la prueba',
+  step1: '<b>Coloca dos topes firmes</b> en tu alfombrilla, a 15–40 cm de distancia: libros, una regla o los bordes de la alfombrilla. El ratón debe tocar un tope en ambos extremos de cada barrido.',
+  step2: '<b>Introduce los DPI</b> que usa tu ratón y haz clic en la zona de prueba para bloquear el ratón.',
+  step3: '<b>Fase 1, referencia:</b> haz barridos lentos y cuidadosos de tope a tope. Ida y vuelta está bien. La prueba avanza sola.',
+  step4: '<b>Fase 2, prueba:</b> haz barridos rápidos y fuertes entre los topes, como en un juego. Haz al menos 10.',
+  step5: 'Después de cada barrido, <b>mantén el ratón quieto contra el tope</b> hasta que ponga Guardado. No levantes nunca el ratón.',
+  step6: 'Cada barrido recorre la misma distancia, así que un sensor sano da el mismo número a cualquier velocidad. Si los barridos rápidos se quedan cortos, el sensor está perdiendo el seguimiento.',
+  dpi: 'DPI del ratón', baseN: 'Barridos de referencia', dpiHint: 'Usa los DPI que tu ratón tiene configurados (míralo en su software o botón de DPI). Solo afecta a los cm y m/s, no al resultado.',
+  padStart: 'Haz clic aquí para empezar', padEsc: 'Pulsa <kbd>Esc</kbd> en cualquier momento para liberar el ratón',
+  padBase: 'Fase 1: barridos lentos de referencia', padTest: 'Fase 2: barridos rápidos',
+  padHint: 'Quédate quieto en cada tope hasta que ponga Guardado · <kbd>Z</kbd> deshacer · <kbd>B</kbd> repetir referencia · <kbd>Esc</kbd> liberar',
+  rec: '● Grabando barrido…', saved: '✓ Guardado, listo para el siguiente', ready: '✓ Listo',
+  lockBlocked: 'El navegador bloqueó el ratón. Abre esta página en su propia pestaña en Chrome o Edge y vuelve a intentarlo.',
+  noRaw: 'Los datos en bruto no están disponibles en este navegador. Desactiva "Mejorar la precisión del puntero" en Windows para un resultado preciso.',
+  stPoll: 'Frecuencia de sondeo (Hz, ahora / máx.)', stRaw: 'Datos en bruto del sensor', stSpeed: 'Velocidad máx. del último barrido', rawOn: 'Sí ✓', rawOff: 'No ⚠',
+  phase: 'Fase', phaseBase: '1 · Referencia', phaseTest: '2 · Prueba',
+  undo: 'Deshacer último', redo: 'Repetir referencia', clear: 'Borrar todo',
+  chartTitle: 'Cuentas por barrido según la velocidad', chartHint: 'Cada punto debería estar sobre la línea azul. Azul = referencia, verde = barridos correctos, rojo = barridos que el sensor midió mal.',
+  axSpeed: 'velocidad máx. (m/s)', axCounts: 'cuentas', chartEmpty: 'Tus barridos aparecerán aquí',
+  tableTitle: 'Barridos', thCounts: 'Cuentas', thPct: '% de la referencia', thSpeed: 'Vel. m/s', thBack: '% hacia atrás', thStatus: 'Estado',
+  stBase: 'referencia', stBaseX: 'referencia (excluida)', stOk: 'ok', stShort: 'CORTO', stLong: 'LARGO', stSpin: 'spin-out', stIgnored: 'ignorado',
+  vNeedBase: 'Fase 1: haz {n} barridos lentos de referencia ({k}/{n} hasta ahora).',
+  vBaseBad: 'Tus barridos de referencia varían hasta un {s}%. Deberían coincidir en un 2–3%, así que probablemente el ratón no llega a los topes cada vez. Pulsa B para repetir la referencia.',
+  vBaseOk: 'Referencia fijada: {c} cuentas = {cm} cm (±{s}%). Ahora barre rápido entre los topes: {n} de al menos 10 barridos de prueba.',
+  vPassH: 'APROBADO', vWarnH: 'POSIBLE PROBLEMA', vFailH: 'SUSPENSO',
+  vPass: '{ok} de {n} barridos rápidos fueron correctos. Tu sensor sigue bien los movimientos rápidos.',
+  vWarn: '{bad} de {n} barridos rápidos fueron incorrectos. Haz más barridos para confirmarlo.',
+  vFail: '{bad} de {n} barridos rápidos fueron incorrectos. El sensor pierde el seguimiento en movimientos rápidos.',
+  vDetail: '{short} cortos (mediana {med}% de la distancia real), {long} largos, {spin} spin-outs. Velocidad máxima registrada: {v} m/s.',
+  vSlow: 'Tu barrido más rápido fue de menos de 2 m/s. Barre más fuerte para poner a prueba el sensor.',
+  vCapped: 'La velocidad se mide con lo que informa el sensor, así que cuando pierde el seguimiento tu mano iba más rápido de lo que se muestra.',
+  vIgnored: '{k} barrido(s) ignorados: sin pausa en el tope.',
+  reportTitle: 'Informe para el vendedor', reportHint: 'Cópialo y envíalo junto con una grabación corta de la pantalla mientras haces la prueba.',
+  copy: 'Copiar informe', copied: 'Copiado.', copyFail: 'Selecciona el texto y pulsa Ctrl+C.',
+  rTitle: 'INFORME DE PRUEBA DEL SENSOR DEL RATÓN', rDate: 'Fecha', rBrowser: 'Navegador', rRaw: 'Datos en bruto del sensor', rDpi: 'DPI configurados', rPoll: 'Frecuencia de sondeo medida',
+  rBase: 'Referencia', rBaseLine: '{c} cuentas = {cm} cm (mediana de {k} barridos lentos, ±{s}%)', rTests: 'Barridos de prueba',
+  rTestLine: '{n} · correctos: {ok} · cortos: {short} · largos: {long} · spin-out: {spin}', rResult: 'Resultado', rSwipes: 'Barridos', rPhaseBase: 'referencia', rPhaseTest: 'prueba',
+  rNone: '(todavía no hay barridos)',
+  rMethod: 'Método: el bloqueo del puntero del navegador lee las cuentas en bruto del sensor (sin la aceleración del sistema operativo). El ratón se desliza entre dos topes fijos, así que cada barrido recorre la misma distancia física. Un sensor que funciona bien da el mismo número a cualquier velocidad.',
+  footer: 'Gratis. Hecho para ayudar a comprobar un ratón antes de confiar en él, o demostrar un fallo al devolverlo.',
+  metaTitle: "Test del sensor del ratón: comprueba pérdida de seguimiento, spin-outs y aceleración negativa",
+  metaDesc: "Test gratuito online del sensor del ratón. Descubre si tu ratón pierde el seguimiento en movimientos rápidos y obtén un informe para el vendedor. Funciona en tu navegador, no se sube nada.",
+  aboutTitle: "Qué comprueba este test",
+  aboutBody: "Cada sensor de ratón tiene una velocidad máxima de seguimiento. Por encima de ella, un buen sensor sigue registrando cada milímetro, mientras que uno débil o defectuoso empieza a perder movimiento: en los juegos la mira se mueve menos que tu mano o salta hacia atrás (un spin-out). Este test lee los datos en bruto directamente del sensor, sin la aceleración de Windows, y compara barridos rápidos con lentos sobre exactamente la misma distancia. Si los rápidos se quedan cortos, el sensor pierde el seguimiento, y el informe te da los números para demostrarlo.",
+  guideLink: "Lee la guía (en inglés): cómo saber si el sensor de tu ratón falla →"
+},
+pt: {
+  title: 'Teste do sensor do mouse',
+  tagline: 'Descubra se o seu mouse perde o rastreamento em movimentos rápidos (spin-outs, aceleração negativa) e gere um relatório para enviar ao vendedor.',
+  privacy: '🔒 Funciona inteiramente no seu navegador. Nada é enviado.',
+  toast: 'Mostrando esta página em {lang}, de acordo com o seu navegador.', toastKeep: 'OK', toastChange: 'Mudar',
+  envMobile: 'Este teste precisa de um computador com mouse. Não funciona em celular ou tablet.',
+  envNoLock: 'Seu navegador não consegue travar o mouse. Use o Chrome ou o Edge em um computador.',
+  envFirefox: 'O Firefox funciona, mas não lê os dados brutos do sensor. Para o resultado mais preciso, use o Chrome ou o Edge, ou desative "Aumentar a precisão do ponteiro" nas configurações de mouse do Windows.',
+  howTitle: 'Como testar',
+  step1: '<b>Coloque dois batentes firmes</b> no mousepad, a 15–40 cm de distância: livros, uma régua ou as bordas do mousepad. O mouse precisa encostar em um batente nas duas pontas de cada deslize.',
+  step2: '<b>Informe o DPI</b> configurado no seu mouse e clique na área de teste para travar o mouse.',
+  step3: '<b>Fase 1, referência:</b> faça deslizes lentos e cuidadosos de batente a batente. Ida e volta pode. O teste avança sozinho.',
+  step4: '<b>Fase 2, teste:</b> deslize rápido e com força entre os batentes, como em um jogo. Faça pelo menos 10.',
+  step5: 'Depois de cada deslize, <b>segure o mouse parado contra o batente</b> até aparecer Salvo. Nunca levante o mouse.',
+  step6: 'Todo deslize cobre a mesma distância, então um sensor saudável mostra o mesmo número em qualquer velocidade. Se os deslizes rápidos ficarem curtos, o sensor está perdendo o rastreamento.',
+  dpi: 'DPI do mouse', baseN: 'Deslizes de referência', dpiHint: 'Use o DPI em que o mouse está configurado (veja no software ou no botão de DPI). Isso só afeta os valores em cm e m/s, não o resultado.',
+  padStart: 'Clique aqui para começar', padEsc: 'Pressione <kbd>Esc</kbd> a qualquer momento para liberar o mouse',
+  padBase: 'Fase 1: deslizes lentos de referência', padTest: 'Fase 2: deslize com força',
+  padHint: 'Fique parado em cada batente até aparecer Salvo · <kbd>Z</kbd> desfazer · <kbd>B</kbd> refazer referência · <kbd>Esc</kbd> liberar',
+  rec: '● Gravando deslize…', saved: '✓ Salvo, pronto para o próximo', ready: '✓ Pronto',
+  lockBlocked: 'O navegador bloqueou o travamento do mouse. Abra esta página em uma aba própria no Chrome ou no Edge e tente de novo.',
+  noRaw: 'Os dados brutos não estão disponíveis neste navegador. Desative "Aumentar a precisão do ponteiro" no Windows para um resultado preciso.',
+  stPoll: 'Taxa de polling (Hz, atual / máx.)', stRaw: 'Dados brutos do sensor', stSpeed: 'Velocidade máx. do último deslize', rawOn: 'Sim ✓', rawOff: 'Não ⚠',
+  phase: 'Fase', phaseBase: '1 · Referência', phaseTest: '2 · Teste',
+  undo: 'Desfazer último', redo: 'Refazer referência', clear: 'Limpar tudo',
+  chartTitle: 'Contagens por deslize x velocidade', chartHint: 'Todo ponto deveria ficar na linha azul. Azul = referência, verde = deslizes corretos, vermelho = deslizes que o sensor errou.',
+  axSpeed: 'velocidade máx. (m/s)', axCounts: 'contagens', chartEmpty: 'Seus deslizes vão aparecer aqui',
+  tableTitle: 'Deslizes', thCounts: 'Contagens', thPct: '% da referência', thSpeed: 'Vel. m/s', thBack: '% para trás', thStatus: 'Status',
+  stBase: 'referência', stBaseX: 'referência (excluída)', stOk: 'ok', stShort: 'CURTO', stLong: 'LONGO', stSpin: 'spin-out', stIgnored: 'ignorado',
+  vNeedBase: 'Fase 1: faça {n} deslizes lentos de referência ({k}/{n} até agora).',
+  vBaseBad: 'Seus deslizes de referência variam até {s}%. Eles deveriam ficar dentro de 2–3%, então provavelmente o mouse não está chegando aos batentes toda vez. Pressione B para refazer a referência.',
+  vBaseOk: 'Referência definida: {c} contagens = {cm} cm (±{s}%). Agora deslize com força entre os batentes: {n} de pelo menos 10 deslizes de teste.',
+  vPassH: 'APROVADO', vWarnH: 'POSSÍVEL PROBLEMA', vFailH: 'REPROVADO',
+  vPass: '{ok} de {n} deslizes rápidos estavam corretos. Seu sensor rastreia bem movimentos rápidos.',
+  vWarn: '{bad} de {n} deslizes rápidos estavam errados. Faça mais deslizes para confirmar.',
+  vFail: '{bad} de {n} deslizes rápidos estavam errados. O sensor perde o rastreamento em movimentos rápidos.',
+  vDetail: '{short} curtos (mediana de {med}% da distância real), {long} longos, {spin} spin-outs. Maior velocidade registrada: {v} m/s.',
+  vSlow: 'Seu deslize mais rápido ficou abaixo de 2 m/s. Deslize com mais força para testar o sensor de verdade.',
+  vCapped: 'A velocidade é medida pelo que o sensor informa, então quando ele perde o rastreamento sua mão estava mais rápida do que aparece.',
+  vIgnored: '{k} deslize(s) ignorado(s): sem pausa no batente.',
+  reportTitle: 'Relatório para o vendedor', reportHint: 'Copie e envie junto com uma gravação curta da tela enquanto você faz o teste.',
+  copy: 'Copiar relatório', copied: 'Copiado.', copyFail: 'Selecione o texto e pressione Ctrl+C.',
+  rTitle: 'RELATÓRIO DE TESTE DO SENSOR DO MOUSE', rDate: 'Data', rBrowser: 'Navegador', rRaw: 'Dados brutos do sensor', rDpi: 'DPI configurado', rPoll: 'Taxa de polling medida',
+  rBase: 'Referência', rBaseLine: '{c} contagens = {cm} cm (mediana de {k} deslizes lentos, ±{s}%)', rTests: 'Deslizes de teste',
+  rTestLine: '{n} · corretos: {ok} · curtos: {short} · longos: {long} · spin-out: {spin}', rResult: 'Resultado', rSwipes: 'Deslizes', rPhaseBase: 'referência', rPhaseTest: 'teste',
+  rNone: '(nenhum deslize registrado ainda)',
+  rMethod: 'Método: o travamento de ponteiro do navegador lê as contagens brutas do sensor (sem a aceleração do sistema operacional). O mouse desliza entre dois batentes fixos, então cada deslize cobre a mesma distância física. Um sensor funcionando mostra o mesmo número em qualquer velocidade.',
+  footer: 'Grátis. Feito para ajudar a verificar um mouse antes de confiar nele, ou comprovar um defeito ao devolvê-lo.',
+  metaTitle: "Teste do sensor do mouse: verifique perda de rastreamento, spin-outs e aceleração negativa",
+  metaDesc: "Teste online gratuito do sensor do mouse. Descubra se o seu mouse perde o rastreamento em movimentos rápidos e gere um relatório para o vendedor. Funciona no navegador, nada é enviado.",
+  aboutTitle: "O que este teste verifica",
+  aboutBody: "Todo sensor de mouse tem uma velocidade máxima de rastreamento. Acima dela, um bom sensor continua registrando cada milímetro, enquanto um fraco ou defeituoso começa a perder movimento: nos jogos a mira se move menos que a sua mão, ou pula para trás (um spin-out). Este teste lê os dados brutos direto do sensor, sem a aceleração do Windows, e compara deslizes rápidos com lentos exatamente na mesma distância. Se os rápidos ficarem curtos, o sensor está perdendo o rastreamento, e o relatório traz os números para comprovar.",
+  guideLink: "Leia o guia (em inglês): como saber se o sensor do seu mouse está com defeito →"
+},
+de: {
+  title: 'Maus-Sensortest',
+  tagline: 'Finde heraus, ob deine Maus bei schnellen Bewegungen das Tracking verliert (Spin-outs, negative Beschleunigung), und erhalte einen Bericht für den Verkäufer.',
+  privacy: '🔒 Läuft komplett in deinem Browser. Es wird nichts hochgeladen.',
+  toast: 'Diese Seite wird auf {lang} angezeigt, passend zu deinem Browser.', toastKeep: 'OK', toastChange: 'Ändern',
+  envMobile: 'Dieser Test braucht einen Computer mit Maus. Auf Handy oder Tablet funktioniert er nicht.',
+  envNoLock: 'Dein Browser kann die Maus nicht sperren. Bitte nutze Chrome oder Edge auf einem Computer.',
+  envFirefox: 'Firefox funktioniert, kann aber keine Rohdaten des Sensors lesen. Für das genaueste Ergebnis nutze Chrome oder Edge, oder schalte in den Windows-Mauseinstellungen „Zeigerbeschleunigung verbessern“ aus.',
+  howTitle: 'So testest du',
+  step1: '<b>Lege zwei feste Anschläge</b> auf dein Mauspad, 15–40 cm auseinander: Bücher, ein Lineal oder die Ränder des Pads. Die Maus muss bei jedem Wisch an beiden Enden einen Anschlag berühren.',
+  step2: '<b>Gib die DPI ein</b>, auf die deine Maus eingestellt ist, und klicke dann in das Testfeld, um die Maus zu sperren.',
+  step3: '<b>Phase 1, Referenz:</b> mach langsame, sorgfältige Wischer von Anschlag zu Anschlag. Hin und her ist okay. Der Test geht von selbst weiter.',
+  step4: '<b>Phase 2, Test:</b> wische schnell und kräftig zwischen den Anschlägen, so wie im Spiel. Mindestens 10 Mal.',
+  step5: 'Halte die Maus nach jedem Wisch <b>ruhig am Anschlag</b>, bis „Gespeichert“ erscheint. Heb die Maus nie an.',
+  step6: 'Jeder Wisch legt dieselbe Strecke zurück, also meldet ein gesunder Sensor bei jeder Geschwindigkeit dieselbe Zahl. Wenn schnelle Wischer zu kurz ausfallen, verliert der Sensor das Tracking.',
+  dpi: 'Maus-DPI', baseN: 'Referenz-Wischer', dpiHint: 'Nutze die DPI, auf die deine Maus wirklich eingestellt ist (in der Software oder per DPI-Taste). Das beeinflusst nur die cm- und m/s-Werte, nicht das Ergebnis.',
+  padStart: 'Hier klicken zum Starten', padEsc: 'Drücke jederzeit <kbd>Esc</kbd>, um die Maus freizugeben',
+  padBase: 'Phase 1: langsame Referenz-Wischer', padTest: 'Phase 2: kräftig wischen',
+  padHint: 'Am Anschlag ruhig halten, bis „Gespeichert“ erscheint · <kbd>Z</kbd> rückgängig · <kbd>B</kbd> Referenz neu · <kbd>Esc</kbd> freigeben',
+  rec: '● Wisch wird aufgezeichnet…', saved: '✓ Gespeichert, bereit für den nächsten', ready: '✓ Bereit',
+  lockBlocked: 'Der Browser hat die Maussperre blockiert. Öffne die Seite in einem eigenen Tab in Chrome oder Edge und versuche es erneut.',
+  noRaw: 'Rohdaten sind in diesem Browser nicht verfügbar. Schalte in Windows „Zeigerbeschleunigung verbessern“ aus, um genaue Ergebnisse zu bekommen.',
+  stPoll: 'Abfragerate (Hz, aktuell / max.)', stRaw: 'Sensor-Rohdaten', stSpeed: 'Spitzentempo letzter Wisch', rawOn: 'An ✓', rawOff: 'Aus ⚠',
+  phase: 'Phase', phaseBase: '1 · Referenz', phaseTest: '2 · Test',
+  undo: 'Letzten löschen', redo: 'Referenz neu', clear: 'Alles löschen',
+  chartTitle: 'Counts pro Wisch nach Geschwindigkeit', chartHint: 'Jeder Punkt sollte auf der blauen Linie liegen. Blau = Referenz, grün = korrekte Test-Wischer, rot = Wischer, die der Sensor falsch gemessen hat.',
+  axSpeed: 'Spitzentempo (m/s)', axCounts: 'Counts', chartEmpty: 'Deine Wischer erscheinen hier',
+  tableTitle: 'Wischer', thCounts: 'Counts', thPct: '% der Referenz', thSpeed: 'Tempo m/s', thBack: '% rückwärts', thStatus: 'Status',
+  stBase: 'Referenz', stBaseX: 'Referenz (ausgeschlossen)', stOk: 'ok', stShort: 'ZU KURZ', stLong: 'ZU LANG', stSpin: 'Spin-out', stIgnored: 'ignoriert',
+  vNeedBase: 'Phase 1: mach {n} langsame Referenz-Wischer ({k}/{n} bisher).',
+  vBaseBad: 'Deine Referenz-Wischer weichen um bis zu {s}% voneinander ab. Sie sollten auf etwa 2–3% übereinstimmen, also erreicht die Maus wohl nicht jedes Mal die Anschläge. Drücke B, um die Referenz neu zu machen.',
+  vBaseOk: 'Referenz steht: {c} Counts = {cm} cm (±{s}%). Jetzt kräftig zwischen den Anschlägen wischen: {n} von mindestens 10 Test-Wischern.',
+  vPassH: 'BESTANDEN', vWarnH: 'MÖGLICHES PROBLEM', vFailH: 'DURCHGEFALLEN',
+  vPass: '{ok} von {n} schnellen Wischern waren korrekt. Dein Sensor erfasst schnelle Bewegungen sauber.',
+  vWarn: '{bad} von {n} schnellen Wischern waren falsch. Mach mehr Wischer, um es zu bestätigen.',
+  vFail: '{bad} von {n} schnellen Wischern waren falsch. Der Sensor verliert bei schnellen Bewegungen das Tracking.',
+  vDetail: '{short} zu kurz (Median {med}% der echten Strecke), {long} zu lang, {spin} Spin-outs. Höchstes gemeldetes Tempo: {v} m/s.',
+  vSlow: 'Dein schnellster Wisch lag unter 2 m/s. Wische kräftiger, um den Sensor richtig zu fordern.',
+  vCapped: 'Das Tempo wird aus den Sensordaten berechnet. Wenn der Sensor das Tracking verliert, war deine Hand also schneller als angezeigt.',
+  vIgnored: '{k} Wischer ignoriert: keine Pause am Anschlag.',
+  reportTitle: 'Bericht für den Verkäufer', reportHint: 'Kopiere ihn und schick ihn zusammen mit einer kurzen Bildschirmaufnahme vom Test.',
+  copy: 'Bericht kopieren', copied: 'Kopiert.', copyFail: 'Markiere den Text und drücke Strg+C.',
+  rTitle: 'MAUS-SENSORTEST: BERICHT', rDate: 'Datum', rBrowser: 'Browser', rRaw: 'Sensor-Rohdaten', rDpi: 'Eingestellte DPI', rPoll: 'Gemessene Abfragerate',
+  rBase: 'Referenz', rBaseLine: '{c} Counts = {cm} cm (Median aus {k} langsamen Wischern, ±{s}%)', rTests: 'Test-Wischer',
+  rTestLine: '{n} · korrekt: {ok} · zu kurz: {short} · zu lang: {long} · Spin-out: {spin}', rResult: 'Ergebnis', rSwipes: 'Wischer', rPhaseBase: 'Referenz', rPhaseTest: 'Test',
+  rNone: '(noch keine Wischer aufgezeichnet)',
+  rMethod: 'Methode: Die Zeigersperre des Browsers liest die Rohdaten des Sensors (ohne Beschleunigung des Betriebssystems). Die Maus wird zwischen zwei festen Anschlägen bewegt, also legt jeder Wisch dieselbe Strecke zurück. Ein funktionierender Sensor meldet bei jeder Geschwindigkeit dieselbe Zahl.',
+  footer: 'Kostenlos. Gemacht, damit man eine Maus prüfen kann, bevor man ihr vertraut, oder einen Defekt bei der Rückgabe beweisen kann.',
+  metaTitle: "Maus-Sensortest: Tracking-Verlust, Spin-outs und negative Beschleunigung prüfen",
+  metaDesc: "Kostenloser Online-Test für deinen Maussensor. Finde heraus, ob deine Maus bei schnellen Bewegungen das Tracking verliert, und erhalte einen Bericht für den Verkäufer. Läuft im Browser, nichts wird hochgeladen.",
+  aboutTitle: "Was dieser Test prüft",
+  aboutBody: "Jeder Maussensor hat eine Höchstgeschwindigkeit, bis zu der er sauber trackt. Darüber erfasst ein guter Sensor weiterhin jeden Millimeter, ein schwacher oder defekter verliert dagegen Bewegung: Im Spiel bewegt sich das Fadenkreuz weniger als deine Hand oder springt zurück (ein Spin-out). Dieser Test liest die Rohdaten direkt vom Sensor, ohne Windows-Beschleunigung, und vergleicht schnelle mit langsamen Wischern über genau dieselbe Strecke. Fallen die schnellen zu kurz aus, verliert der Sensor das Tracking, und der Bericht liefert dir die Zahlen als Beweis.",
+  guideLink: "Zum Ratgeber (auf Englisch): So erkennst du, ob dein Maussensor defekt ist →"
+},
+zh: {
+  title: '鼠标传感器测试',
+  tagline: '检测你的鼠标在快速移动时是否会丢失追踪(甩飞、负加速),并生成一份可以发给卖家的报告。',
+  privacy: '🔒 完全在你的浏览器中运行,不会上传任何数据。',
+  toast: '已根据你的浏览器语言以{lang}显示本页。', toastKeep: '好的', toastChange: '更改',
+  envMobile: '此测试需要使用带鼠标的电脑,无法在手机或平板上进行。',
+  envNoLock: '你的浏览器无法锁定鼠标。请在电脑上使用 Chrome 或 Edge。',
+  envFirefox: 'Firefox 可以使用,但无法读取传感器原始数据。为获得最准确的结果,请使用 Chrome 或 Edge,或在 Windows 鼠标设置中关闭“提高指针精确度”。',
+  howTitle: '测试方法',
+  step1: '<b>在鼠标垫上放两个固定挡块</b>,相距 15–40 厘米:可以用书、尺子或鼠标垫边缘。每次滑动时,鼠标两端都必须碰到挡块。',
+  step2: '<b>输入鼠标当前的 DPI</b>,然后点击测试区域锁定鼠标。',
+  step3: '<b>第 1 阶段,基准:</b>在两个挡块之间慢慢地、仔细地滑动。来回滑动都可以。测试会自动进入下一阶段。',
+  step4: '<b>第 2 阶段,测试:</b>在挡块之间用力快速甩动,就像玩游戏时一样。至少做 10 次。',
+  step5: '每次滑动后,<b>让鼠标贴着挡块保持不动</b>,直到显示“已保存”。全程不要抬起鼠标。',
+  step6: '每次滑动的距离都相同,所以正常的传感器在任何速度下都会报告相同的数值。如果快速滑动的数值偏小,说明传感器在丢失追踪。',
+  dpi: '鼠标 DPI', baseN: '基准滑动次数', dpiHint: '请填写鼠标实际设置的 DPI(可在驱动软件或 DPI 按键中查看)。它只影响厘米和米/秒的数值,不影响测试结论。',
+  padStart: '点击这里开始', padEsc: '随时按 <kbd>Esc</kbd> 释放鼠标',
+  padBase: '第 1 阶段:慢速基准滑动', padTest: '第 2 阶段:用力快速甩动',
+  padHint: '在每个挡块处保持不动直到显示“已保存” · <kbd>Z</kbd> 撤销 · <kbd>B</kbd> 重做基准 · <kbd>Esc</kbd> 释放',
+  rec: '● 正在记录滑动…', saved: '✓ 已保存,可以进行下一次', ready: '✓ 就绪',
+  lockBlocked: '浏览器阻止了鼠标锁定。请在 Chrome 或 Edge 的单独标签页中打开本页后重试。',
+  noRaw: '此浏览器无法读取原始数据。请在 Windows 中关闭“提高指针精确度”以获得准确结果。',
+  stPoll: '回报率(Hz,当前 / 最高)', stRaw: '传感器原始数据', stSpeed: '上次滑动的峰值速度', rawOn: '开启 ✓', rawOff: '关闭 ⚠',
+  phase: '阶段', phaseBase: '1 · 基准', phaseTest: '2 · 测试',
+  undo: '撤销上一次', redo: '重做基准', clear: '全部清除',
+  chartTitle: '每次滑动的计数与速度', chartHint: '每个点都应落在蓝线上。蓝色为基准滑动,绿色为正确的测试滑动,红色为传感器测错的滑动。',
+  axSpeed: '峰值速度 (m/s)', axCounts: '计数', chartEmpty: '你的滑动记录会显示在这里',
+  tableTitle: '滑动记录', thCounts: '计数', thPct: '占基准 %', thSpeed: '速度 m/s', thBack: '反向 %', thStatus: '状态',
+  stBase: '基准', stBaseX: '基准(已排除)', stOk: '正常', stShort: '偏短', stLong: '偏长', stSpin: '甩飞', stIgnored: '已忽略',
+  vNeedBase: '第 1 阶段:请做 {n} 次慢速基准滑动(已完成 {k}/{n})。',
+  vBaseBad: '你的基准滑动之间相差最多 {s}%。它们应在约 2–3% 以内,鼠标可能没有每次都碰到挡块。按 B 重做基准。',
+  vBaseOk: '基准已确定:{c} 计数 = {cm} 厘米(±{s}%)。现在请在挡块之间用力快速甩动:已完成 {n} 次,至少需要 10 次。',
+  vPassH: '通过', vWarnH: '可能有问题', vFailH: '未通过',
+  vPass: '{n} 次快速滑动中有 {ok} 次正确。你的传感器能正常追踪快速移动。',
+  vWarn: '{n} 次快速滑动中有 {bad} 次出错。请多做几次以确认。',
+  vFail: '{n} 次快速滑动中有 {bad} 次出错。传感器在快速移动时会丢失追踪。',
+  vDetail: '{short} 次偏短(中位数为实际距离的 {med}%),{long} 次偏长,{spin} 次甩飞。传感器报告的最高速度:{v} m/s。',
+  vSlow: '你最快的一次滑动低于 2 m/s。请更用力地甩动,才能真正测试传感器。',
+  vCapped: '速度是根据传感器报告的数据计算的,所以当它丢失追踪时,你手的实际速度比显示的更快。',
+  vIgnored: '已忽略 {k} 次滑动:在挡块处没有停顿。',
+  reportTitle: '给卖家的报告', reportHint: '复制这份报告,并附上一段你做测试时的简短录屏一起发送。',
+  copy: '复制报告', copied: '已复制。', copyFail: '请选中文字并按 Ctrl+C。',
+  rTitle: '鼠标传感器测试报告', rDate: '日期', rBrowser: '浏览器', rRaw: '传感器原始数据', rDpi: '设置的 DPI', rPoll: '实测回报率',
+  rBase: '基准', rBaseLine: '{c} 计数 = {cm} 厘米({k} 次慢速滑动的中位数,±{s}%)', rTests: '测试滑动',
+  rTestLine: '{n} 次 · 正确:{ok} · 偏短:{short} · 偏长:{long} · 甩飞:{spin}', rResult: '结论', rSwipes: '滑动记录', rPhaseBase: '基准', rPhaseTest: '测试',
+  rNone: '(尚无滑动记录)',
+  rMethod: '方法:通过浏览器的指针锁定读取传感器原始计数(绕过操作系统加速)。鼠标在两个固定挡块之间滑动,因此每次滑动的物理距离相同。正常的传感器在任何速度下都会报告相同的数值。',
+  footer: '免费使用。帮助大家在信任一只鼠标之前先检查它,或在退货时证明故障。',
+  metaTitle: "鼠标传感器测试:检测丢失追踪、甩飞和负加速",
+  metaDesc: "免费在线鼠标传感器测试。检测鼠标在快速移动时是否会丢失追踪,并生成可以发给卖家的报告。在浏览器中运行,不上传任何数据。",
+  aboutTitle: "这个测试检测什么",
+  aboutBody: "每个鼠标传感器都有一个能正常追踪的最高速度。超过这个速度时,好的传感器仍然能记录每一毫米,而性能弱或有故障的传感器会开始丢失移动:在游戏中准星移动得比你的手少,或者突然往回跳(甩飞)。本测试绕过 Windows 加速,直接读取传感器的原始数据,并在完全相同的距离上比较快速滑动和慢速滑动。如果快速滑动的数值偏小,说明传感器在丢失追踪,报告会给出证明这一点的数据。",
+  guideLink: "阅读指南(英文):如何判断鼠标传感器是否有故障 →"
+}
+};
+
+/* ================= i18n helpers ================= */
+const $ = id => document.getElementById(id);
+let lang = 'en';
+function t(key, vars) {
+  let s = (I18N[lang] && I18N[lang][key]) ?? I18N.en[key] ?? key;
+  if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => vars[k] !== undefined ? vars[k] : m);
+  return s;
+}
+const langPath = c => c === 'en' ? '/' : '/' + c;
+const onWeb = location.protocol.startsWith('http');
+function browserLang() {
+  for (const l of (navigator.languages || [navigator.language || 'en'])) {
+    const c = String(l).toLowerCase().split('-')[0];
+    if (I18N[c]) return c;
+  }
+  return 'en';
+}
+function savedLang() { try { const s = localStorage.getItem('mt-lang'); return I18N[s] ? s : null; } catch (e) { return null; } }
+function saveLang(c) { try { localStorage.setItem('mt-lang', c); } catch (e) {} }
+function goLang(c) {
+  saveLang(c);
+  if (onWeb && c !== lang) location.href = langPath(c);
+  else applyLang(c, false);
+}
+function applyLang(code, remember) {
+  lang = I18N[code] ? code : 'en';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = LANGS[lang].dir;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  $('langName').textContent = LANGS[lang].name;
+  document.querySelectorAll('#langList button').forEach(b => b.setAttribute('aria-current', b.dataset.l === lang));
+  if (remember) { try { localStorage.setItem('mt-lang', lang); } catch (e) {} }
+  refreshAll();
+}
+function buildLangList() {
+  $('langList').innerHTML = Object.entries(LANGS).map(([c, v]) => `<li><button data-l="${c}"><span>${v.name}</span><span class="muted small">${c.toUpperCase()}</span></button></li>`).join('');
+  $('langList').querySelectorAll('button').forEach(b => b.onclick = () => { $('langList').classList.remove('open'); hideToast(); goLang(b.dataset.l); });
+  $('langBtn').onclick = e => { e.stopPropagation(); $('langList').classList.toggle('open'); };
+  document.addEventListener('click', () => $('langList').classList.remove('open'));
+}
+let toastEl = null;
+function hideToast() { if (toastEl) { toastEl.style.opacity = 0; const el = toastEl; toastEl = null; setTimeout(() => el.remove(), 400); } }
+function showToast() {
+  toastEl = document.createElement('div'); toastEl.className = 'toast';
+  toastEl.innerHTML = `<span>🌐 ${t('toast', { lang: LANGS[lang].name })}</span><button id="tKeep">${t('toastKeep')}</button><button id="tChange">${t('toastChange')}</button>`;
+  document.body.appendChild(toastEl);
+  $('tKeep').onclick = () => { saveLang(lang); hideToast(); };
+  $('tChange').onclick = e => { e.stopPropagation(); hideToast(); $('langList').classList.add('open'); };
+  setTimeout(hideToast, 9000);
+}
+
+/* ================= environment checks ================= */
+let envKey = null;
+function checkEnv() {
+  const coarseOnly = matchMedia('(pointer: coarse)').matches && !matchMedia('(any-pointer: fine)').matches;
+  if (coarseOnly) envKey = ['bad', 'envMobile'];
+  else if (!('requestPointerLock' in Element.prototype)) envKey = ['bad', 'envNoLock'];
+  else if (/firefox/i.test(navigator.userAgent)) envKey = ['warn', 'envFirefox'];
+}
+function renderEnv() {
+  const a = $('envAlert');
+  if (!envKey) { a.classList.add('hide'); return; }
+  a.className = 'alert ' + envKey[0]; a.innerHTML = t(envKey[1]);
+}
+
+/* ================= test state ================= */
+const pad = $('pad');
+let locked = false, rawMode = 'unknown', lockError = false;
+const cpi = () => Math.max(50, +$('cpi').value || 800);
+const baseN = () => Math.min(20, Math.max(3, +$('baseN').value || 6));
+const c2cm = c => c / cpi() * 2.54;
+const cps2ms = v => v / cpi() * 0.0254;
+const IDLE = 400; // a swipe ends after the mouse has been still this long (ms)
+let seg = null, phase = 'base', recState = 'ready';
+const swipes = [];
+let pollCount = 0, pollMax = 0, pollLive = 0;
+
+/* pointer lock */
+pad.addEventListener('click', async () => {
+  if (locked) return;
+  lockError = false;
+  try { await pad.requestPointerLock({ unadjustedMovement: true }); rawMode = 'yes'; }
+  catch (e) {
+    try { await pad.requestPointerLock(); rawMode = 'no'; }
+    catch (e2) { lockError = true; renderPad(); return; }
+  }
+  renderStats();
+});
+document.addEventListener('pointerlockchange', () => { locked = document.pointerLockElement === pad; pad.classList.toggle('locked', locked); renderPad(); });
+document.addEventListener('pointerlockerror', () => { lockError = true; renderPad(); });
+
+function renderPad() {
+  let html;
+  if (lockError) html = `<div class="big" style="color:var(--bad)">⚠</div><div>${t('lockBlocked')}</div>`;
+  else if (!locked) html = `<div class="big">${t('padStart')}</div><div>${t('padEsc')}</div>`;
+  else {
+    const recTxt = { ready: t('ready'), rec: t('rec'), saved: t('saved') }[recState];
+    const recCol = recState === 'rec' ? 'var(--bad)' : 'var(--good)';
+    html = `<div class="big">${phase === 'base' ? t('padBase') : t('padTest')}</div><div class="rec" style="color:${recCol}">${recTxt}</div><div class="small">${t('padHint')}</div>` +
+      (rawMode === 'no' ? `<div class="small" style="color:var(--warn);margin-top:6px">${t('noRaw')}</div>` : '');
+  }
+  $('padText').innerHTML = html;
+}
+function setRec(s) { recState = s; if (locked) renderPad(); }
+function renderStats() {
+  $('sPoll').textContent = pollLive + ' / ' + pollMax;
+  $('sRaw').textContent = rawMode === 'yes' ? t('rawOn') : rawMode === 'no' ? t('rawOff') : '–';
+  $('sRaw').style.color = rawMode === 'yes' ? 'var(--good)' : rawMode === 'no' ? 'var(--warn)' : '';
+  const last = swipes[swipes.length - 1];
+  $('sSpeed').textContent = last ? cps2ms(last.peak).toFixed(2) + ' m/s' : '–';
+}
+setInterval(() => { pollLive = pollCount; pollCount = 0; if (pollLive > pollMax && pollLive < 10000) pollMax = pollLive; renderStats(); }, 1000);
+
+/* input */
+const evName = 'onpointerrawupdate' in window ? 'pointerrawupdate' : 'mousemove';
+document.addEventListener(evName, e => {
+  if (!locked) return;
+  const tm = e.timeStamp, dx = e.movementX, dy = e.movementY;
+  if (!dx && !dy) return;
+  pollCount++;
+  if (seg && tm - seg.last > IDLE) { finish(seg); seg = null; }
+  if (!seg) { seg = { s: [], last: tm, w: [], pk: 0 }; setRec('rec'); }
+  seg.s.push([tm, dx]); seg.last = tm;
+});
+setInterval(() => { if (seg && performance.now() - seg.last > IDLE) { const s = seg; seg = null; finish(s); setRec('saved'); } }, 50);
+
+function finish(sg) {
+  const s = sg.s;
+  if (s.length < 5) return;
+  let net = 0, path = 0;
+  for (const [, dx] of s) { net += dx; path += Math.abs(dx); }
+  const counts = Math.abs(net);
+  if (counts < 300) return; // small adjustment, not a swipe
+  const dir = Math.sign(net);
+  let back = 0;
+  for (const [, dx] of s) if (Math.sign(dx) === -dir) back += Math.abs(dx);
+  // peak speed: window of >= 10 ms and >= 3 samples, works at any report rate
+  let peak = 0, j = 0, acc = 0;
+  for (let i = 1; i < s.length; i++) {
+    acc += Math.abs(s[i][1]);
+    while (j < i - 2 && s[i][0] - s[j + 1][0] >= 10) { j++; acc -= Math.abs(s[j][1]); }
+    if (i - j >= 2) peak = Math.max(peak, acc / Math.max(s[i][0] - s[j][0], 1) * 1000);
+  }
+  const backPct = back / path * 100;
+  const merged = backPct > 45; // net movement near zero: two passes joined
+  swipes.push({ counts, peak, backPct, merged, spin: !merged && backPct > 2, phase, dir });
+  if (phase === 'base' && baseSwipes().length >= baseN()) setPhase('test');
+  refreshAll();
+}
+
+/* phases */
+const baseSwipes = () => swipes.filter(s => s.phase === 'base' && !s.merged);
+function setPhase(p) { phase = p; renderPhase(); if (locked) renderPad(); }
+function renderPhase() { const el = $('phaseLbl'); el.textContent = phase === 'base' ? t('phaseBase') : t('phaseTest'); el.className = 'phase ' + phase; }
+function redoBase() { for (let i = swipes.length - 1; i >= 0; i--) if (swipes[i].phase === 'base') swipes.splice(i, 1); pollMax = 0; setPhase('base'); refreshAll(); }
+function undo() { swipes.pop(); if (phase === 'test' && !swipes.some(s => s.phase === 'test') && baseSwipes().length < baseN()) setPhase('base'); refreshAll(); }
+function clearAll() { swipes.length = 0; pollMax = 0; setPhase('base'); refreshAll(); }
+
+/* analysis */
+const med = a => { const v = [...a].sort((x, y) => x - y); return v.length ? v[v.length >> 1] : 0; };
+function analyse() {
+  const all = baseSwipes();
+  if (all.length < 3) return null;
+  const b0 = med(all.map(s => s.counts));
+  let base = all.filter(s => Math.abs(s.counts - b0) / b0 <= 0.05);
+  if (base.length < 3) base = all;
+  const b = med(base.map(s => s.counts));
+  const spread = Math.max(...base.map(s => Math.abs(s.counts - b))) / b * 100;
+  const tol = Math.max(0.10, 2 * spread / 100);
+  const test = swipes.filter(s => s.phase === 'test' && !s.merged);
+  const st = s => s.spin ? 'spin' : s.counts < (1 - tol) * b ? 'short' : s.counts > (1 + tol) * b ? 'long' : 'ok';
+  const shorts = test.filter(s => st(s) === 'short');
+  return { b, spread, tol, base, test, st, n: test.length,
+    okN: test.filter(s => st(s) === 'ok').length, shortN: shorts.length,
+    longN: test.filter(s => st(s) === 'long').length, spinN: test.filter(s => st(s) === 'spin').length,
+    shortMed: shorts.length ? med(shorts.map(s => s.counts / b * 100)) : 0,
+    fastMax: test.length ? Math.max(...test.map(s => s.peak)) : 0,
+    ignored: swipes.filter(s => s.merged).length };
+}
+function status(s, a) {
+  if (s.merged) return ['stIgnored', 'dim'];
+  if (s.phase === 'base') return a && !a.base.includes(s) ? ['stBaseX', 'dim'] : ['stBase', ''];
+  if (!a) return [null, ''];
+  return { spin: ['stSpin', 'flag'], short: ['stShort', 'flag'], long: ['stLong', 'flag'], ok: ['stOk', ''] }[a.st(s)];
+}
+function verdict(a) {
+  if (!a) return { cls: 'v-none', html: t('vNeedBase', { n: baseN(), k: baseSwipes().length }) };
+  if (a.spread > 6 || (a.spread > 3 && a.n === 0)) return { cls: 'v-warn', html: t('vBaseBad', { s: a.spread.toFixed(1) }) };
+  if (a.n < 10) return { cls: 'v-none', html: t('vBaseOk', { c: a.b, cm: c2cm(a.b).toFixed(1), s: a.spread.toFixed(1), n: a.n }) };
+  const bad = a.n - a.okN, pct = bad / a.n * 100;
+  const level = pct >= 25 ? 'Fail' : pct >= 10 ? 'Warn' : 'Pass';
+  let body = t('v' + level, { ok: a.okN, bad, n: a.n });
+  if (bad) body += ' ' + t('vDetail', { short: a.shortN, med: a.shortMed.toFixed(0), long: a.longN, spin: a.spinN, v: cps2ms(a.fastMax).toFixed(2) });
+  if (level === 'Pass' && cps2ms(a.fastMax) < 2) body += ' ' + t('vSlow');
+  if (level !== 'Pass') body += ' ' + t('vCapped');
+  if (a.ignored) body += ' ' + t('vIgnored', { k: a.ignored });
+  return { cls: level === 'Fail' ? 'v-bad' : level === 'Warn' ? 'v-warn' : 'v-good', html: `<span class="head">${t('v' + level + 'H')}</span>${body}`, level };
+}
+
+/* rendering */
+function refreshAll() {
+  const a = analyse();
+  $('nSw').textContent = swipes.length;
+  $('tb').innerHTML = swipes.map((s, i) => {
+    const [k, cl] = status(s, a);
+    const pct = a ? (s.counts / a.b * 100).toFixed(0) + '%' : '–';
+    return `<tr class="${cl}"><td>${i + 1}</td><td>${s.counts}</td><td>${pct}</td><td>${cps2ms(s.peak).toFixed(2)}</td><td>${s.backPct.toFixed(1)}</td><td>${k ? t(k) : '–'}</td></tr>`;
+  }).reverse().join('');
+  const v = verdict(a);
+  $('verdict').className = 'verdict ' + v.cls; $('verdict').innerHTML = v.html;
+  renderPhase(); renderStats(); renderEnv(); renderPad(); draw(a); buildReport(a, v);
+}
+
+function draw(a) {
+  const cv = $('chart'), dpr = devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight; if (!W) return;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const g = cv.getContext('2d'); g.scale(dpr, dpr); g.clearRect(0, 0, W, H); g.direction = 'ltr'; g.textAlign = 'left';
+  const L = 58, R = 14, T = 14, B = 36;
+  g.font = '11px system-ui'; g.fillStyle = '#9aa1ad'; g.strokeStyle = '#2a2f3a';
+  const pts = swipes.filter(s => !s.merged);
+  if (!pts.length) { g.fillText(t('chartEmpty'), L, H / 2); return; }
+  const xs = pts.map(s => cps2ms(s.peak)), ys = pts.map(s => s.counts);
+  const xMax = Math.max(...xs, 0.5) * 1.1;
+  const ref = a ? a.b : med(ys);
+  let yMax = Math.max(...ys, ref * 1.15) * 1.05, yMin = 0;
+  const X = x => L + x / xMax * (W - L - R), Y = y => T + (yMax - y) / (yMax - yMin) * (H - T - B);
+  for (let i = 0; i <= 4; i++) {
+    const yv = yMin + (yMax - yMin) * i / 4, py = Y(yv);
+    g.beginPath(); g.moveTo(L, py); g.lineTo(W - R, py); g.stroke();
+    g.fillText(Math.round(yv), 6, py + 4);
+    const xv = xMax * i / 4; g.fillText(xv.toFixed(1), X(xv) - 8, H - 20);
+  }
+  g.fillText(t('axSpeed') + ' →', L, H - 5);
+  if (a) {
+    g.strokeStyle = '#4f8cff'; g.lineWidth = 2; g.beginPath(); g.moveTo(L, Y(a.b)); g.lineTo(W - R, Y(a.b)); g.stroke();
+    g.strokeStyle = '#e6a23c'; g.lineWidth = 1; g.setLineDash([5, 4]);
+    for (const f of [1 - a.tol, 1 + a.tol]) { g.beginPath(); g.moveTo(L, Y(a.b * f)); g.lineTo(W - R, Y(a.b * f)); g.stroke(); }
+    g.setLineDash([]);
+  }
+  pts.forEach((s, i) => {
+    const k = status(s, a)[0];
+    g.fillStyle = s.phase === 'base' ? '#4f8cff' : ['stSpin', 'stShort', 'stLong'].includes(k) ? '#ef5350' : '#2fbf71';
+    g.beginPath(); g.arc(X(xs[i]), Y(ys[i]), 5, 0, 7); g.fill();
+  });
+}
+addEventListener('resize', () => draw(analyse()));
+
+/* report */
+function buildReport(a, v) {
+  const L = [];
+  L.push(t('rTitle'));
+  L.push(`${t('rDate')}: ${new Date().toLocaleString(lang)}`);
+  L.push(`${t('rBrowser')}: ${navigator.userAgent}`);
+  L.push(`${t('rRaw')}: ${rawMode === 'yes' ? t('rawOn') : rawMode === 'no' ? t('rawOff') : '–'} · ${t('rDpi')}: ${cpi()} · ${t('rPoll')}: ${pollMax} Hz`);
+  L.push('');
+  if (a) {
+    L.push(`${t('rBase')}: ${t('rBaseLine', { c: a.b, cm: c2cm(a.b).toFixed(1), k: a.base.length, s: a.spread.toFixed(1) })}`);
+    L.push(`${t('rTests')}: ${t('rTestLine', { n: a.n, ok: a.okN, short: a.shortN, long: a.longN, spin: a.spinN })}`);
+    if (v && v.level) L.push(`${t('rResult')}: ${v.html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}`);
+    L.push('');
+  }
+  L.push(t('rSwipes') + ':');
+  if (!swipes.length) L.push('  ' + t('rNone'));
+  swipes.forEach((s, i) => {
+    const k = status(s, a)[0];
+    L.push(`  #${String(i + 1).padStart(2)}  ${(s.phase === 'base' ? t('rPhaseBase') : t('rPhaseTest')).padEnd(10)} ${String(s.counts).padStart(6)}  ${a ? ((s.counts / a.b * 100).toFixed(0) + '%').padStart(5) : ''}  ${s.dir > 0 ? '→' : '←'}  ${cps2ms(s.peak).toFixed(2)} m/s  ${t('thBack')} ${s.backPct.toFixed(1)}  ${k ? t(k) : ''}`);
+  });
+  L.push('');
+  L.push(t('rMethod'));
+  L.push(location.href.startsWith('http') ? location.href.split('#')[0] : '');
+  $('rep').value = L.join('\n').trim();
+}
+$('copyBtn').onclick = async () => {
+  try { await navigator.clipboard.writeText($('rep').value); $('copyMsg').textContent = t('copied'); }
+  catch (e) { $('rep').select(); $('copyMsg').textContent = t('copyFail'); }
+};
+
+/* controls */
+document.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (e.target.tagName === 'INPUT') return;
+  if (k === 'z') undo();
+  if (k === 'b') redoBase();
+});
+$('undo').onclick = undo; $('redoBase').onclick = redoBase;
+$('clear').onclick = clearAll;
+$('cpi').oninput = () => refreshAll();
+$('baseN').oninput = () => refreshAll();
+
+/* start */
+buildLangList();
+checkEnv();
+const pageLang = I18N[document.documentElement.lang] ? document.documentElement.lang : 'en';
+// Home page: send people to the language they picked before, or (first visit) their browser's language
+if (onWeb && pageLang === 'en') {
+  const saved = savedLang(), target = saved || browserLang();
+  if (target !== 'en') location.replace(langPath(target) + (saved ? '' : '?auto=1'));
+}
+applyLang(pageLang, false);
+if (new URLSearchParams(location.search).has('auto')) {
+  showToast(); $('langBtn').classList.add('pulse');
+  history.replaceState(null, '', location.pathname);
+}
+</script>
+</body>
+</html>
