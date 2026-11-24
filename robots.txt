@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mouse-test.pages.dev/sitemap.xml
+Sitemap: https://mousesensortest.mousetest.workers.dev/sitemap.xml
